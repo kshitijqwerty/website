@@ -242,7 +242,7 @@ function Home() {
             {showCV ? "Hide CV" : "View CV"}
           </button>
           <a
-            href="/cv.pdf"
+            href="/kshitij_cv.pdf"
             download
             className="px-6 py-3 rounded-2xl border border-neutral-700"
           >
@@ -256,7 +256,7 @@ function Home() {
             className="rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900"
           >
             <iframe
-              src="/cv.pdf"
+              src="/kshitij_cv.pdf"
               title="CV Preview"
               className="w-full h-[800px]"
             />
