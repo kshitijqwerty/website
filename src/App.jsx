@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Github, Linkedin, Mail, Server, Brain, Database } from "lucide-react";
+import { Github, Linkedin, Mail, Server, Brain, Database, ServerCog, BrainCircuit } from "lucide-react";
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from "react-router-dom";
 
 function BlogPost() {
@@ -47,94 +47,123 @@ Here I compare Celery, BullMQ, and event-driven architectures for background pro
     </div>
   );
 }
+function Navbar() {
+  return (
+    <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2">
+      <nav className="flex items-center gap-6 px-6 py-3 rounded-2xl border border-white/10 bg-white/10 backdrop-blur-xl shadow-lg">
+        <a href="#" className="text-sm font-medium hover:text-white">Home</a>
+        <a href="#projects" className="text-sm font-medium text-neutral-300 hover:text-white">Projects</a>
+        <a href="#cv" className="text-sm font-medium text-neutral-300 hover:text-white">CV</a>
+        <a href="#blogs" className="text-sm font-medium text-neutral-300 hover:text-white">Blog</a>
+        <a href="#contact" className="text-sm font-medium text-neutral-300 hover:text-white">Contact</a>
+      </nav>
+    </div>
+  );
+}
+
+function ExpertiseCard({ icon: Icon, title, description, tech }) {
+  return (
+    <motion.div
+      className="rounded-2xl border border-neutral-800 p-6 bg-neutral-900 text-center justify-center flex flex-col items-center gap-2"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.04, y: -6 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      viewport={{ once: true }}
+    >
+      <Icon size={36} />
+      <h3 className="text-xl font-medium">{title}</h3>
+      <p className="text-neutral-400 mt-2">{description}</p>
+      <p className="text-sm text-neutral-500 mt-4">{tech}</p>
+    </motion.div>
+  );
+}
 
 function Home() {
   const [showCV, setShowCV] = useState(false);
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 px-6 md:px-16">
+      <Navbar />
       {/* Hero */}
-      <section className="py-24 grid gap-6">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-6xl font-bold"
-        >
-          Kshitij Gupta
-        </motion.h1>
-        <p className="text-neutral-400 max-w-2xl">
-          ML Engineer specializing in <strong>Python</strong> and <strong>Node.js</strong>, with experience building
-          scalable APIs, distributed systems, and production-ready <strong>Machine Learning solutions</strong>.
-        </p>
-        <div className="flex gap-4">
-          <a href="#projects" className="px-6 py-3 rounded-2xl bg-white text-black font-medium">View Projects</a>
-          <a href="#contact" className="px-6 py-3 rounded-2xl border border-neutral-700">Contact</a>
+      <section className="py-24 grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid gap-6">
+          <h2 className="text-xl text-neutral-400">Hello, I'm</h2>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl font-bold"
+          >
+            Kshitij Gupta
+          </motion.h1>
+          <p className="text-neutral-400 max-w-2xl">
+            ML Engineer specializing in <strong>Python</strong> and <strong>Node.js</strong>, with experience building
+            scalable APIs, distributed systems, and production-ready <strong>Machine Learning solutions</strong>.
+          </p>
+          <div className="flex gap-4">
+            <a href="#projects" className="px-6 py-3 rounded-2xl bg-white text-black font-medium">View Projects</a>
+            <a href="#contact" className="px-6 py-3 rounded-2xl border border-neutral-700">Contact</a>
+          </div>
         </div>
+
+        {/* Profile Image */}
+        <motion.div
+          className="flex justify-center md:justify-end"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-2 border-neutral-800 bg-neutral-900">
+            <img
+              src="/profile.jpg"
+              alt="Profile"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </motion.div>
       </section>
 
       {/* Expertise */}
       <section className="py-20">
-        <h2 className="text-3xl font-semibold mb-10">Core Expertise</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="rounded-2xl border border-neutral-800 p-6 bg-neutral-900">
-            <Brain className="mb-4" />
-            <h3 className="text-xl font-medium">ML Engineering</h3>
-            <p className="text-neutral-400 mt-2">
-              Building, training, and deploying machine learning models into production systems. Optimizing ML models for edge systems.
-            </p>
-            <p className="text-sm text-neutral-500 mt-4">PyTorch, TensorFlow, scikit-learn, ONNX, TF-Lite, MLflow</p>
-          </div>
-          <div className="rounded-2xl border border-neutral-800 p-6 bg-neutral-900">
-            <Server className="mb-4" />
-            <h3 className="text-xl font-medium">Backend Engineering</h3>
-            <p className="text-neutral-400 mt-2">
-              Designing REST APIs, microservices, and background workers.
-            </p>
-            <p className="text-sm text-neutral-500 mt-4">Python, FastAPI, Django, Node.js, Express</p>
-          </div>
-          
-          <div className="rounded-2xl border border-neutral-800 p-6 bg-neutral-900">
-            <Database className="mb-4" />
-            <h3 className="text-xl font-medium">Databases & Infrastructure</h3>
-            <p className="text-neutral-400 mt-2">
-              Data modeling, performance optimization, caching, and cloud deployment.
-            </p>
-            <p className="text-sm text-neutral-500 mt-4">PostgreSQL, MongoDB, Redis, Docker, Kubernetes</p>
-          </div>
-          
+        <h2 className="text-4xl font-semibold mb-10">Core Expertise</h2>
+        <div className="grid md:grid-cols-3 gap-8 mb-10">
+          <ExpertiseCard
+            icon={Brain}
+            title="ML Engineering"
+            description="Building, training, and deploying machine learning models into production systems. Optimizing ML models for edge systems."
+            tech="PyTorch, TensorFlow, scikit-learn, ONNX, TF-Lite, MLflow"
+          />
+          <ExpertiseCard
+            icon={Server}
+            title="Backend Engineering"
+            description="Designing REST APIs, microservices, and background workers."
+            tech="Python, FastAPI, Django, Node.js, Express"
+          />
+          <ExpertiseCard
+            icon={Database}
+            title="Databases & Infrastructure"
+            description="Data modeling, performance optimization, caching, and cloud deployment."
+            tech="PostgreSQL, MongoDB, Redis, Docker, Kubernetes"
+          />
         </div>
-      </section>
-
-      {/* Architecture */}
-      <section className="py-20">
-        <h2 className="text-3xl font-semibold mb-10">Architectural Design</h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="rounded-2xl border border-neutral-800 p-6 bg-neutral-900">
-            <h3 className="text-xl font-medium mb-2">Backend System Architecture</h3>
-            <p className="text-neutral-400">
-              Typical architecture I design includes API gateways, stateless backend services,
-              async workers, caching layers, and relational or NoSQL databases. Services are
-              containerized and deployed using CI/CD pipelines.
-            </p>
-            <p className="text-sm text-neutral-500 mt-4">
-              API Gateway → Backend Services → Cache / DB → Async Workers
-            </p>
-          </div>
-          <div className="rounded-2xl border border-neutral-800 p-6 bg-neutral-900">
-            <h3 className="text-xl font-medium mb-2">ML System Architecture</h3>
-            <p className="text-neutral-400">
-              End-to-end ML systems including data ingestion, feature engineering, model training,
-              experiment tracking, and scalable inference via APIs or batch jobs.
-            </p>
-            <p className="text-sm text-neutral-500 mt-4">
-              Data Sources → ETL → Training → Model Registry → Inference API
-            </p>
-          </div>
+        <div className="grid md:grid-cols-2 gap-8 text-center">
+          <ExpertiseCard
+            icon={ServerCog}
+            title="Backend System Architecture"
+            description="Typical architecture I design includes API gateways, stateless backend services, async workers, caching layers, and relational or NoSQL databases. Services are containerized and deployed using CI/CD pipelines."
+            tech="API Gateway → Backend Services → Cache / DB → Async Workers"
+          />
+          <ExpertiseCard
+            icon={BrainCircuit}
+            title="ML System Architecture"
+            description="End-to-end ML systems including data ingestion, feature engineering, model training, experiment tracking, and scalable inference via APIs or batch jobs."
+            tech="Data Sources → ETL → Training → Model Registry → Inference API"
+          />
         </div>
       </section>
 
       {/* Tech Stack */}
       {/* <section className="py-20">
-        <h2 className="text-3xl font-semibold mb-10">Tech Stack</h2>
+        <h2 className="text-4xl font-semibold mb-10">Tech Stack</h2>
         <div className="flex flex-wrap gap-3">
           {["Python", "Node.js", "FastAPI", "Django", "NestJS", "PostgreSQL", "MongoDB", "Redis", "Docker", "AWS", "PyTorch", "TensorFlow", "MLflow", "Airflow"].map((tech) => (
             <span
@@ -191,7 +220,7 @@ function Home() {
 
       {/* Projects */}
       <section id="projects" className="py-20">
-        <h2 className="text-3xl font-semibold mb-10">Selected Projects</h2>
+        <h2 className="text-4xl font-semibold mb-10">Projects</h2>
         <div className="grid md:grid-cols-2 gap-8">
           {[
             {
@@ -230,7 +259,7 @@ function Home() {
 
       {/* CV */}
       <section id="cv" className="py-20">
-        <h2 className="text-3xl font-semibold mb-6">CV</h2>
+        <h2 className="text-4xl font-semibold mb-6">CV</h2>
         <p className="text-neutral-400 mb-6 max-w-2xl">
           You can view my CV directly on this page or download a copy for offline use.
         </p>
@@ -266,7 +295,7 @@ function Home() {
 
       {/* About */}
       <section className="py-20 max-w-3xl">
-        <h2 className="text-3xl font-semibold mb-6">About Me</h2>
+        <h2 className="text-4xl font-semibold mb-6">About Me</h2>
         <p className="text-neutral-400 leading-relaxed">
           I’m a backend-focused software engineer with a strong foundation in Python and Node.js.
           My work sits at the intersection of backend systems and machine learning — from designing
@@ -276,7 +305,7 @@ function Home() {
 
       {/* Contact */}
       <section id="contact" className="py-20">
-        <h2 className="text-3xl font-semibold mb-6">Get in Touch</h2>
+        <h2 className="text-4xl font-semibold mb-6">Get in Touch</h2>
         <div className="flex gap-6">
           <a href="https://github.com/kshitijqwerty" target="_blank"><Github /></a>
           <a href="https://linkedin.com/in/horz7" target="_blank"><Linkedin /></a>
