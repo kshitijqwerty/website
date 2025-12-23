@@ -51,10 +51,10 @@ function Navbar() {
   return (
     <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2">
       <nav className="flex items-center gap-6 px-6 py-3 rounded-2xl border border-white/10 bg-white/10 backdrop-blur-xl shadow-lg">
-        <a href="#" className="text-sm font-medium hover:text-white">Home</a>
+        <a href="#" className="text-sm font-medium text-neutral-300 hover:text-white">Home</a>
         <a href="#projects" className="text-sm font-medium text-neutral-300 hover:text-white">Projects</a>
         <a href="#cv" className="text-sm font-medium text-neutral-300 hover:text-white">CV</a>
-        <a href="#blogs" className="text-sm font-medium text-neutral-300 hover:text-white">Blog</a>
+        {/* <a href="#blogs" className="text-sm font-medium text-neutral-300 hover:text-white">Blog</a> */}
         <a href="#contact" className="text-sm font-medium text-neutral-300 hover:text-white">Contact</a>
       </nav>
     </div>
@@ -81,6 +81,7 @@ function ExpertiseCard({ icon: Icon, title, description, tech }) {
 
 function Home() {
   const [showCV, setShowCV] = useState(false);
+  const [activeTag, setActiveTag] = useState("All");
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 px-6 md:px-16">
       <Navbar />
@@ -220,40 +221,83 @@ function Home() {
 
       {/* Projects */}
       <section id="projects" className="py-20">
-        <h2 className="text-4xl font-semibold mb-10">Projects</h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          {[
-            {
-              title: "Scalable API Platform",
-              desc: "High-performance backend system handling authentication, payments, and real-time data.",
-              tech: "Python, FastAPI, PostgreSQL, Docker"
-            },
-            {
-              title: "ML Prediction Service",
-              desc: "Machine learning pipeline deployed as an API for real-time inference.",
-              tech: "PyTorch, MLflow, AWS, REST API"
-            },
-            {
-              title: "Node.js Microservices",
-              desc: "Event-driven microservices architecture with message queues and caching.",
-              tech: "Node.js, NestJS, Redis, RabbitMQ"
-            },
-            {
-              title: "Data Processing Pipeline",
-              desc: "Large-scale data ingestion, validation, and feature engineering system.",
-              tech: "Python, Pandas, Airflow"
-            }
-          ].map((p, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ scale: 1.03 }}
-              className="rounded-2xl border border-neutral-800 p-6 bg-neutral-900"
+        <h2 className="text-4xl font-semibold mb-6">Projects</h2>
+
+        <div className="flex flex-wrap gap-3 mb-10">
+          {["All", "Backend", "ML", "Infrastructure"].map((tag) => (
+            <button
+              key={tag}
+              onClick={() => setActiveTag(tag)}
+              className={`px-4 py-2 rounded-full text-sm border transition-colors ${
+                activeTag === tag
+                  ? "bg-white text-black border-white"
+                  : "bg-neutral-900 text-neutral-300 border-neutral-700 hover:border-neutral-500"
+              }`}
             >
-              <h3 className="text-xl font-medium">{p.title}</h3>
-              <p className="text-neutral-400 mt-2">{p.desc}</p>
-              <p className="text-sm text-neutral-500 mt-4">{p.tech}</p>
-            </motion.div>
+              {tag}
+            </button>
           ))}
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {[{
+            title: "Video Hosting Platform",
+            desc: "High-performance Video Platform with encrypted HLS and DASH playbacks.",
+            tech: "Python, Django, FFmpeg, PostgreSQL, Docker, Kubernetes",
+            image: "/projects/api-platform.png",
+            link: "https://github.com/kshitijqwerty/video_hosting",
+            metrics: ["Auto-scaling", "<120ms latency", "99.9% uptime"],
+            tags: ["Backend", "Infrastructure"]
+          }, {
+            title: "ML Prediction Service",
+            desc: "Machine learning inference service with auto-scaling.",
+            tech: "PyTorch, MLflow, AWS",
+            image: "/projects/ml-service.png",
+            link: "https://github.com/yourname/ml-service",
+            metrics: ["~40ms inference", "Auto-scaling", "A/B tested"],
+            tags: ["ML", "Backend"]
+          }]
+            .filter((p) => activeTag === "All" || p.tags.includes(activeTag))
+            .map((p, i) => (
+              <motion.a
+                key={i}
+                href={p.link}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.03 }}
+                className="group rounded-2xl border border-neutral-800 bg-neutral-900 overflow-hidden"
+              >
+                <div className="relative h-48 w-full overflow-hidden bg-neutral-800">
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="grid gap-2 text-sm text-neutral-200 text-center">
+                      {p.metrics.map((m, idx) => (
+                        <span key={idx} className="px-3 py-1 rounded-full bg-white/10 backdrop-blur">{m}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-medium">{p.title}</h3>
+                  <p className="text-neutral-400 mt-2">{p.desc}</p>
+                  <p className="text-sm text-neutral-500 mt-4">{p.tech}</p>
+
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {p.tags.map((t) => (
+                      <span key={t} className="text-xs px-2 py-1 rounded-full bg-neutral-800 border border-neutral-700">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <p className="mt-4 text-sm text-indigo-400">View Project -&gt;</p>
+                </div>
+              </motion.a>
+            ))}
         </div>
       </section>
 
