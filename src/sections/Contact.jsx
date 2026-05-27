@@ -8,8 +8,9 @@ export default function Contact() {
       </h2>
 
       <p className="text-neutral-400 max-w-2xl">
-        I’m always interested in backend engineering,
-        infrastructure, and machine learning projects.
+        I'm open to remote ML engineering roles worldwide — 
+        computer vision, LLM systems, and AI infrastructure. 
+        Always happy to talk shop.
       </p>
 
       <SocialLinks />

@@ -90,7 +90,7 @@ export default function ProjectCard({ project }) {
 
         {/* Buttons */}
         <div className="flex gap-4 mt-auto pt-7">
-          {status === "online" && (
+          {project.demo && status === "online" && (
             <a
               href={project.demo}
               target="_blank"

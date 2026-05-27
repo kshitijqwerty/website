@@ -22,9 +22,12 @@ export default function Hero() {
         </motion.h1>
 
         <p className="mt-8 text-lg text-neutral-400 leading-relaxed max-w-2xl">
-          ML Engineer specializing in Python and Node.js,
-          building scalable backend systems and
-          production-ready machine learning platforms.
+          I build production AI systems — from on-device TFLite models
+        running offline on Android to Kubernetes inference clusters
+        serving Fortune-500 clients on GCP and Azure.
+        4 years across computer vision, generative image pipelines,
+        and LLM infrastructure. Full-stack enough to own the entire
+        pipeline. Currently open to remote roles worldwide.
         </p>
 
         <div className="flex gap-4 mt-10">

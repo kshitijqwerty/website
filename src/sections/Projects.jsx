@@ -12,12 +12,12 @@ export default function Projects() {
     <section id="projects" className="py-24">
       <SectionTitle
         title="Projects"
-        subtitle="Selected backend systems and machine learning infrastructure projects."
+        subtitle="Selected machine learning and AI engineering projects."
       />
 
       {/* Filter Tags */}
       <div className="flex flex-wrap gap-3 mb-12">
-        {["All", "ML", "Infrastructure", "Backend", "Frontend"].map(
+        {["All", "ML", "LLM", "CV", "MLOps", "Frontend"].map(
           (tag) => (
             <button
               key={tag}

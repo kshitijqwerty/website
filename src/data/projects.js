@@ -1,8 +1,8 @@
 export const projects = [
   {
-    title: "AI Doc",
+    title: "NeuralDocs AI",
 
-    desc: "AI-powered PDF summarizer that uses local LLMs to generate concise summaries, extract key insights, and enable intelligent document understanding without relying on external APIs.",
+    desc: "Self-hosted AI document intelligence platform — local LLM inference via Ollama with zero data egress. Deployable on VPS, Proxmox, or bare-metal via a single docker compose up.",
 
     tech: "Python, FastAPI, React, Ollama, Next.js",
 
@@ -18,7 +18,7 @@ export const projects = [
       "Insight extraction",
     ],
 
-    tags: ["ML", "Backend"],
+    tags: ["LLM", "RAG"],
 
     features: [
       "Upload and process PDFs",
@@ -62,63 +62,64 @@ export const projects = [
   ],
 },
 
-  // {
-  //   title: "Video Hosting Platform",
+{
+    title: "LLM Eval Harness",
 
-  //   desc: "High-performance encrypted video hosting platform with adaptive streaming and scalable media pipelines.",
+    desc: "Automated evaluation pipeline for RAG and agentic LLM systems. Define test cases in YAML, run them across 4 model providers, and block bad deployments via a CI/CD hallucination gate.",
 
-  //   tech: "Python, Django, FFmpeg, PostgreSQL, Docker, Kubernetes",
+    tech: "Python, FastAPI, ChromaDB, PostgreSQL, GitHub Actions",
 
-  //   image: "/projects/video-platform.png",
+    image: "/projects/llm_eval.png",
 
-  //   demo: "https://video-demo.kgup.me/",
+    demo: null,
 
-  //   github:
-  //     "https://github.com/kshitijqwerty/video_hosting",
+    github: "https://github.com/kshitijqwerty/llm-eval-harness",
 
-  //   metrics: [
-  //     "99.9% uptime",
-  //     "<120ms latency",
-  //     "Auto-scaling",
-  //   ],
+    metrics: [
+      "4 LLM providers",
+      "CI/CD gate",
+      "LLM-as-judge scoring",
+    ],
 
-  //   tags: ["Backend", "Infrastructure"],
+    tags: ["LLM", "MLOps"],
 
-  //   features: [
-  //     "Encrypted HLS streaming",
-  //     "Adaptive bitrate playback",
-  //     "Video transcoding pipelines",
-  //     "Async media processing",
-  //   ],
-  // },
+    features: [
+      "YAML-driven eval task definitions",
+      "LLM-as-judge scoring (faithfulness, relevance, hallucination)",
+      "Supports Ollama, Groq, OpenAI, and Claude",
+      "Full RAG pipeline with ChromaDB + Sentence Transformers",
+      "FastAPI dashboard with HTML report generation",
+      "GitHub Actions CI/CD gate blocks hallucination regressions",
+    ],
+  },
+  {
+    title: "Image Similarity Search",
 
-  // {
-  //   title: "ML Prediction Service",
+    desc: "Semantic image retrieval engine using CLIP embeddings and FAISS ANN indexing. Search millions of images by meaning, not metadata — with sub-millisecond latency.",
 
-  //   desc: "Scalable machine learning inference platform with autoscaling deployment pipelines and monitoring.",
+    tech: "Python, FastAPI, PyTorch, FAISS, CLIP, Streamlit",
 
-  //   tech: "PyTorch, MLflow, AWS, FastAPI",
+    image: "/projects/image_search.png",
 
-  //   image: "/projects/ml-service.png",
+    demo: null,
 
-  //   demo: "https://ml-demo.kgup.me/",
+    github: "https://github.com/kshitijqwerty/image-search-faiss",
 
-  //   github:
-  //     "https://github.com/kshitijqwerty/ml-service",
+    metrics: [
+      "Sub-ms search latency",
+      "CLIP ViT-B/32",
+      "HNSW + IVF indexes",
+    ],
 
-  //   metrics: [
-  //     "~40ms inference",
-  //     "A/B tested",
-  //     "Autoscaling",
-  //   ],
+    tags: ["ML", "CV"],
 
-  //   tags: ["ML", "Backend"],
-
-  //   features: [
-  //     "Model registry integration",
-  //     "Realtime inference APIs",
-  //     "Experiment tracking",
-  //     "Autoscaling inference workers",
-  //   ],
-  // },
+    features: [
+      "CLIP ViT-B/32 semantic image embeddings",
+      "FAISS HNSW, IVF, and exact index benchmarking",
+      "Recall vs latency trade-off analysis",
+      "Incremental indexing and embedding caching",
+      "Metadata filtering on search results",
+      "Streamlit frontend with top-K retrieval and similarity scores",
+    ],
+  }
 ];
