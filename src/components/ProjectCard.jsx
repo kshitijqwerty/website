@@ -47,7 +47,7 @@ export default function ProjectCard({ project }) {
         />
 
         {/* Hover Metrics */}
-        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white">
           <div className="grid gap-3 text-sm text-center">
             {project.metrics?.map((metric, idx) => (
               <span
@@ -62,9 +62,9 @@ export default function ProjectCard({ project }) {
 
         {/* Status Badge */}
         <div className="absolute top-4 right-4">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-black/70 backdrop-blur border border-white/10">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-black/70 backdrop-blur border border-white/10 text-white">
             <Circle size={10} className={`fill-current ${statusColor}`} />
-            <span className="text-xs text-white uppercase tracking-wide">
+            <span className="text-xs uppercase tracking-wide">
               {status}
             </span>
           </div>
@@ -98,7 +98,7 @@ export default function ProjectCard({ project }) {
               href={project.demo}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center justify-center gap-2 text-sm px-4 py-2 rounded-xl bg-white text-black hover:opacity-90 transition-opacity w-full"
+              className="btn-primary bg-white text-black flex items-center justify-center gap-2 text-sm px-4 py-2 rounded-xl hover:opacity-90 transition-opacity w-full"
             >
               <ExternalLink size={16} />
               Live Demo

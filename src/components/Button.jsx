@@ -4,7 +4,7 @@ export default function Button({
   primary = false,
 }) {
   const styles = primary
-    ? "bg-white text-black hover:opacity-90"
+    ? "btn-primary bg-white text-black hover:opacity-90"
     : "border border-neutral-700 hover:border-neutral-500";
 
   if (href) {

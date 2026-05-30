@@ -24,7 +24,7 @@ export default function Projects() {
               onClick={() => setActiveTag(tag)}
               className={`px-4 py-2 rounded-full text-sm border transition-colors ${
                 activeTag === tag
-                  ? "bg-white text-black border-white"
+                  ? "tag-active bg-white text-black border-white"
                   : "bg-neutral-900 text-neutral-300 border-neutral-700 hover:border-neutral-500"
               }`}
             >

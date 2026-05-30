@@ -16,7 +16,7 @@ export default function CV() {
       <div className="flex gap-4 mb-10">
         <button
           onClick={() => setShowCV(!showCV)}
-          className="px-6 py-3 rounded-2xl bg-white text-black font-medium hover:opacity-90 transition-opacity"
+          className="btn-primary bg-white text-black px-6 py-3 rounded-2xl font-medium hover:opacity-90 transition-opacity"
         >
           {showCV ? "Hide CV" : "View CV"}
         </button>

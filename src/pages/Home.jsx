@@ -1,5 +1,3 @@
-import Navbar from "../components/Navbar";
-
 import Hero from "../sections/Hero";
 import Expertise from "../sections/Expertise";
 import Projects from "../sections/Projects";
@@ -11,10 +9,6 @@ import Blogs from "../sections/Blogs";
 export default function Home() {
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      {/* Floating Navbar */}
-      <Navbar />
-
-      {/* Main Content */}
       <main id="main-content" className="max-w-6xl mx-auto px-6 md:px-10">
         <Hero />
 

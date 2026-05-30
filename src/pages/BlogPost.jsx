@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { useTheme } from "../context/ThemeContext";
 import { posts } from "../data/blogPosts.json";
 
 function estimateReadTime(html) {
@@ -9,7 +10,7 @@ function estimateReadTime(html) {
   return Math.max(1, Math.ceil(words / 200));
 }
 
-function useCopyButtons(containerRef) {
+function useCopyButtons(containerRef, theme) {
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -65,14 +66,15 @@ function useCopyButtons(containerRef) {
         pre.classList.remove("rounded-xl", "overflow-hidden");
       });
     };
-  }, [containerRef]);
+  }, [containerRef, theme]);
 }
 
 export default function BlogPost() {
   const { slug } = useParams();
+  const { resolved: theme } = useTheme();
   const contentRef = useRef(null);
 
-  useCopyButtons(contentRef);
+  useCopyButtons(contentRef, theme);
 
   const post = posts[slug];
 
@@ -80,22 +82,34 @@ export default function BlogPost() {
     const diagrams = contentRef.current?.querySelectorAll(".mermaid");
     if (!diagrams?.length) return;
 
+    const isLight = theme === "light";
+
     import("mermaid").then(({ default: mermaid }) => {
       mermaid.initialize({
-        theme: "dark",
-        themeVariables: {
-          background: "transparent",
-          primaryColor: "#1e293b",
-          primaryTextColor: "#e2e8f0",
-          primaryBorderColor: "#334155",
-          lineColor: "#64748b",
-          secondaryColor: "#0f172a",
-          tertiaryColor: "#1e293b",
-        },
+        theme: isLight ? "neutral" : "dark",
+        themeVariables: isLight
+          ? {
+              background: "transparent",
+              primaryColor: "#e5e5e5",
+              primaryTextColor: "#404040",
+              primaryBorderColor: "#d4d4d4",
+              lineColor: "#a3a3a3",
+              secondaryColor: "#f5f5f5",
+              tertiaryColor: "#ffffff",
+            }
+          : {
+              background: "transparent",
+              primaryColor: "#1e293b",
+              primaryTextColor: "#e2e8f0",
+              primaryBorderColor: "#334155",
+              lineColor: "#64748b",
+              secondaryColor: "#0f172a",
+              tertiaryColor: "#1e293b",
+            },
       });
       mermaid.run({ nodes: diagrams });
     });
-  }, [post]);
+  }, [post, theme]);
 
   useEffect(() => {
     document.title = post
@@ -117,7 +131,7 @@ export default function BlogPost() {
           </p>
           <Link
             to="/blog"
-            className="px-6 py-3 rounded-2xl bg-white text-black font-medium hover:opacity-90 transition-opacity inline-block"
+            className="btn-primary bg-white text-black px-6 py-3 rounded-2xl font-medium hover:opacity-90 transition-opacity inline-block"
           >
             Browse all posts
           </Link>
