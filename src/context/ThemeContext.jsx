@@ -1,6 +1,5 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-
-const ThemeContext = createContext();
+import { useEffect, useMemo, useState } from "react";
+import { ThemeContext } from "./ThemeCtx";
 
 function getPreferred() {
   if (typeof window === "undefined") return "dark";
@@ -49,8 +48,4 @@ export function ThemeProvider({ children }) {
   );
 }
 
-export function useTheme() {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) throw new Error("useTheme must be used within ThemeProvider");
-  return ctx;
-}
+

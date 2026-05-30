@@ -1,42 +1,8 @@
-import { Github, ExternalLink, Circle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Github, ExternalLink } from "lucide-react";
 
 export default function ProjectCard({ project }) {
-  const [status, setStatus] = useState("checking");
-
-  useEffect(() => {
-    if (!project.demo) {
-      setStatus("offline");
-      return;
-    }
-    async function checkStatus() {
-      try {
-        await fetch(project.demo, {
-          method: "HEAD",
-          mode: "no-cors",
-        });
-        setStatus("online");
-      } catch {
-        setStatus("offline");
-      }
-    }
-    checkStatus();
-  }, [project.demo]);
-
-  const statusColor =
-    status === "online"
-      ? "text-green-400"
-      : status === "offline"
-      ? "text-red-400"
-      : "text-yellow-400";
-
   return (
-    <div
-      className={[
-        "group rounded-3xl border border-neutral-800 bg-neutral-900 overflow-hidden transition-opacity flex flex-col card-hover-scale",
-        status === "offline" ? "opacity-70" : "",
-      ].join(" ")}
-    >
+    <div className="group rounded-3xl border border-neutral-800 bg-neutral-900 overflow-hidden transition-opacity flex flex-col card-hover-scale">
       {/* Image */}
       <div className="relative h-56 overflow-hidden bg-neutral-800">
         <img
@@ -62,15 +28,6 @@ export default function ProjectCard({ project }) {
           </div>
         </div>
 
-        {/* Status Badge */}
-        <div className="absolute top-4 right-4">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-black/70 backdrop-blur border border-white/10 text-white">
-            <Circle size={10} className={`fill-current ${statusColor}`} />
-            <span className="text-xs uppercase tracking-wide">
-              {status}
-            </span>
-          </div>
-        </div>
       </div>
 
       {/* Content */}
@@ -95,7 +52,7 @@ export default function ProjectCard({ project }) {
 
         {/* Buttons */}
         <div className="flex gap-4 mt-auto pt-7">
-          {project.demo && status === "online" && (
+          {project.demo && (
             <a
               href={project.demo}
               target="_blank"

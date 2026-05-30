@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "../context/useTheme";
 
 export default function ReadingProgress({ articleRef }) {
   const { resolved: theme } = useTheme();

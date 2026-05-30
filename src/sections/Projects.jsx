@@ -44,7 +44,7 @@ export default function Projects() {
           )
           .map((project, index) => (
             <ProjectCard
-              key={index}
+              key={project.title}
               project={project}
             />
           ))}

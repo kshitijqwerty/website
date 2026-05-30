@@ -14,7 +14,7 @@ export default function AnimatedPage({ children }) {
       }
     }
     window.scrollTo({ top: 0 });
-  }, []);
+  }, [hash]);
 
   return <div className="animate-page-enter">{children}</div>;
 }
