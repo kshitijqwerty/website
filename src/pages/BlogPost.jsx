@@ -14,7 +14,7 @@ function useCopyButtons(containerRef) {
     const container = containerRef.current;
     if (!container) return;
 
-    const pres = container.querySelectorAll("pre");
+    const pres = container.querySelectorAll("pre:not(.mermaid-pre)");
     const buttons = [];
 
     const headers = [];
@@ -77,6 +77,27 @@ export default function BlogPost() {
   const post = posts[slug];
 
   useEffect(() => {
+    const diagrams = contentRef.current?.querySelectorAll(".mermaid");
+    if (!diagrams?.length) return;
+
+    import("mermaid").then(({ default: mermaid }) => {
+      mermaid.initialize({
+        theme: "dark",
+        themeVariables: {
+          background: "transparent",
+          primaryColor: "#1e293b",
+          primaryTextColor: "#e2e8f0",
+          primaryBorderColor: "#334155",
+          lineColor: "#64748b",
+          secondaryColor: "#0f172a",
+          tertiaryColor: "#1e293b",
+        },
+      });
+      mermaid.run({ nodes: diagrams });
+    });
+  }, [post]);
+
+  useEffect(() => {
     document.title = post
       ? `${post.title} — Kshitij Gupta`
       : "Post not found — Kshitij Gupta";
@@ -109,7 +130,7 @@ export default function BlogPost() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 px-6 md:px-10 py-20">
-      <article className="max-w-3xl mx-auto">
+      <article className="max-w-4xl mx-auto">
         <nav className="flex items-center gap-4 text-sm text-neutral-500 mb-12">
           <Link
             to="/blog"

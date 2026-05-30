@@ -170,6 +170,21 @@ html {
   line-height: 1.6;
 }
 
+.article-content .mermaid-pre {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 1.5em;
+  overflow: hidden;
+}
+
+.article-content .mermaid {
+  display: flex;
+  justify-content: center;
+  padding: 1.5em;
+  background: transparent;
+}
+
 /* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *,

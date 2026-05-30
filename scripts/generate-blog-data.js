@@ -18,6 +18,31 @@ marked.use(
   })
 );
 
+marked.use({
+  extensions: [
+    {
+      name: "mermaid",
+      level: "block",
+      start(src) {
+        return src.indexOf("```mermaid\n");
+      },
+      tokenizer(src) {
+        const match = /^```mermaid\n([\s\S]*?)\n```/.exec(src);
+        if (match) {
+          return {
+            type: "mermaid",
+            raw: match[0],
+            text: match[1].trim(),
+          };
+        }
+      },
+      renderer(token) {
+        return `<pre class="mermaid-pre"><div class="mermaid">\n${token.text}\n</div></pre>\n`;
+      },
+    },
+  ],
+});
+
 marked.setOptions({
   breaks: true,
   gfm: true,
