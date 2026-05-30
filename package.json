@@ -4,8 +4,8 @@
   "version": "1.1.1",
   "type": "module",
   "scripts": {
-    "prebuild": "node scripts/generate-blog-data.js",
-    "predev": "node scripts/generate-blog-data.js",
+    "prebuild": "node scripts/generate-blog-data.js && node scripts/generate-sitemap.js",
+    "predev": "node scripts/generate-blog-data.js && node scripts/generate-sitemap.js",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
-    "framer-motion": "^12.23.26",
     "lucide-react": "^0.562.0",
     "mermaid": "^11.15.0",
     "react": "^19.2.0",
