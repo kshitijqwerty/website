@@ -5,6 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Kshitij Gupta — ML Engineer building production AI systems: computer vision, LLM infrastructure, and full-stack ML pipelines." />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta property="og:title" content="Kshitij Gupta" />
     <meta property="og:description" content="Production AI systems — from on-device TFLite models to Kubernetes inference clusters serving Fortune-500 clients." />
     <meta property="og:image" content="/profile.jpg" />
@@ -16,7 +18,18 @@
     <meta name="twitter:image" content="/profile.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" />
+    <link rel="preload" as="image" href="/profile.jpg" fetchpriority="high" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" />
+    </noscript>
+    <style>
+      html,body,#root{background-color:#0a0a0a}
+      body{color:#a1a1aa;font-family:Inter,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;margin:0}
+      .light,.light body,.light #root{background-color:#f5f5f5}
+      .light body{color:#525252}
+    </style>
     <title>Kshitij Gupta</title>
   </head>
   <body>
