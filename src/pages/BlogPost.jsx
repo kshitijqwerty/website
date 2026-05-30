@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { useTheme } from "../context/ThemeContext";
 import ReadingProgress from "../components/ReadingProgress";
+import Lightbox from "../components/Lightbox";
 import { posts } from "../data/blogPosts.json";
 
 function estimateReadTime(html) {
@@ -103,9 +104,27 @@ export default function BlogPost() {
   const { resolved: theme } = useTheme();
   const contentRef = useRef(null);
 
+  const post = posts[slug];
+  const [lightboxSrc, setLightboxSrc] = useState(null);
+
   useCopyButtons(contentRef, theme);
 
-  const post = posts[slug];
+  useEffect(() => {
+    const container = contentRef.current;
+    if (!container) return;
+    const imgs = container.querySelectorAll("img");
+    function onClick(e) {
+      setLightboxSrc(e.currentTarget.src);
+    }
+    imgs.forEach((img) => {
+      img.addEventListener("click", onClick);
+    });
+    return () => {
+      imgs.forEach((img) => {
+        img.removeEventListener("click", onClick);
+      });
+    };
+  }, [post, lightboxSrc]);
 
   useEffect(() => {
     const diagrams = contentRef.current?.querySelectorAll(".mermaid");
@@ -153,6 +172,9 @@ export default function BlogPost() {
   if (!post) {
     return (
       <div className="min-h-screen bg-neutral-950 text-neutral-100 flex items-center justify-center px-6">
+        {lightboxSrc && (
+          <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
+        )}
         <div className="text-center">
           <h1 className="text-4xl font-bold font-heading mb-4">Post not found</h1>
           <p className="text-neutral-400 mb-8">
@@ -173,6 +195,9 @@ export default function BlogPost() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 px-6 md:px-10 py-20">
+      {lightboxSrc && (
+        <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
+      )}
       <ReadingProgress articleRef={contentRef} />
       <article className="max-w-4xl mx-auto">
         <nav className="flex items-center gap-4 text-sm text-neutral-500 mb-12">
