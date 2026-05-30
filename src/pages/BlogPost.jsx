@@ -22,11 +22,11 @@ function useCopyButtons(containerRef, theme) {
     const headers = [];
 
     pres.forEach((pre) => {
-      pre.classList.add("relative", "rounded-xl", "overflow-hidden");
+      pre.classList.add("relative", "rounded-xl", "overflow-x-auto");
 
       const header = document.createElement("div");
       header.className =
-        "flex items-center justify-between px-4 py-1.5 bg-neutral-900 border-b border-neutral-800";
+        "sticky left-0 z-10 flex items-center justify-between px-4 py-1.5 bg-neutral-900 border-b border-neutral-800";
 
       const lang = pre.getAttribute("data-language") || "";
       const label = document.createElement("span");
@@ -36,20 +36,48 @@ function useCopyButtons(containerRef, theme) {
 
       const btn = document.createElement("button");
       btn.className =
-        "flex items-center justify-center w-6 h-6 rounded-md text-neutral-500 hover:text-white hover:bg-neutral-700/60 transition-colors";
+        "flex items-center justify-center w-6 h-6 max-sm:w-8 max-sm:h-8 rounded-md text-neutral-500 hover:text-white hover:bg-neutral-700/60 transition-colors";
+      btn.setAttribute("aria-label", "Copy code");
       btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+
+      async function copyText(text) {
+        if (navigator.clipboard) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return;
+          } catch { /* fall through */ }
+        }
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          const ok = document.execCommand("copy");
+          if (!ok) throw new Error("execCommand copy failed");
+        } finally {
+          document.body.removeChild(ta);
+        }
+      }
+
+      function iconHTML(paths, color) {
+        return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+      }
+
+      const clipboardIcon = `<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>`;
 
       btn.addEventListener("click", async () => {
         const code = pre.querySelector("code");
         if (!code) return;
         try {
-          await navigator.clipboard.writeText(code.textContent);
-          btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+          await copyText(code.textContent);
+          btn.innerHTML = iconHTML(`<polyline points="20 6 9 17 4 12"/>`, "#22c55e");
           setTimeout(() => {
-            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+            btn.innerHTML = iconHTML(clipboardIcon, "currentColor");
           }, 2000);
         } catch {
-          btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+          btn.innerHTML = iconHTML(`<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>`, "#ef4444");
         }
       });
 
@@ -64,7 +92,7 @@ function useCopyButtons(containerRef, theme) {
       buttons.forEach((btn) => btn.remove());
       headers.forEach((h) => h.remove());
       pres.forEach((pre) => {
-        pre.classList.remove("rounded-xl", "overflow-hidden");
+        pre.classList.remove("rounded-xl", "overflow-x-auto");
       });
     };
   }, [containerRef, theme]);

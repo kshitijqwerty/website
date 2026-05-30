@@ -114,6 +114,10 @@ body {
 }
 
 /* Article prose styles for blog posts */
+.article-content {
+  overflow-wrap: break-word;
+}
+
 .article-content h1,
 .article-content h2,
 .article-content h3,
@@ -200,6 +204,14 @@ body {
   font-size: 0.95em;
 }
 
+@media (max-width: 640px) {
+  .article-content table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 .article-content th,
 .article-content td {
   border: 1px solid var(--color-neutral-800);
@@ -231,22 +243,26 @@ body {
   border-radius: 6px;
   font-size: 0.85em;
   color: var(--color-neutral-200);
+  word-break: break-all;
 }
 
 .article-content pre {
   position: relative;
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   margin-bottom: 1.5em;
   border: 1px solid var(--color-neutral-800);
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
 }
 
 .article-content pre code {
   display: block;
   padding: 1.25em;
-  overflow-x: auto;
   font-size: 0.85em;
   line-height: 1.6;
+  min-width: max-content;
 }
 
 .article-content .mermaid-pre {
@@ -262,6 +278,8 @@ body {
   justify-content: center;
   padding: 1.5em;
   background: transparent;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Respect reduced motion preferences */

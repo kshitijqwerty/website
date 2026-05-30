@@ -34,7 +34,7 @@ export default function ReadingProgress({ articleRef }) {
   const isLight = theme === "light";
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-40 h-[3px] pointer-events-none">
+    <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] pointer-events-none">
       <div
         className="h-full"
         style={{
