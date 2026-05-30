@@ -1,31 +1,31 @@
-import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useLocation,
 } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 
 import ErrorBoundary from "./components/ErrorBoundary";
 import Navbar from "./components/Navbar";
+import AnimatedPage from "./components/AnimatedPage";
 import Home from "./pages/Home";
 import BlogIndex from "./pages/BlogIndex";
 import BlogPost from "./pages/BlogPost";
 
-function ScrollToHash() {
-  const { hash } = useLocation();
+function AppContent() {
+  const location = useLocation();
 
-  useEffect(() => {
-    if (hash) {
-      const id = hash.replace("#", "");
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [hash]);
-
-  return null;
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
+        <Route path="/blog" element={<AnimatedPage><BlogIndex /></AnimatedPage>} />
+        <Route path="/blog/:slug" element={<AnimatedPage><BlogPost /></AnimatedPage>} />
+        <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
+      </Routes>
+    </AnimatePresence>
+  );
 }
 
 export default function App() {
@@ -33,13 +33,7 @@ export default function App() {
     <Router>
       <ErrorBoundary>
         <Navbar />
-        <ScrollToHash />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/blog" element={<BlogIndex />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppContent />
       </ErrorBoundary>
     </Router>
   );
