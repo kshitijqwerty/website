@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 import SectionTitle from "../components/SectionTitle";
-import { list } from "../data/blogPosts.json";
+import list from "../data/blogList.json";
 
 export default function Blogs() {
   const latest = list.slice(0, 3);

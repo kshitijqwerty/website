@@ -50,7 +50,9 @@ marked.setOptions({
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const contentDir = join(__dirname, "..", "content", "blog");
-const outFile = join(__dirname, "..", "src", "data", "blogPosts.json");
+const outDir = join(__dirname, "..", "src", "data");
+const listFile = join(outDir, "blogList.json");
+const postsFile = join(outDir, "blogPosts.json");
 
 const files = readdirSync(contentDir).filter((f) => f.endsWith(".md"));
 
@@ -93,5 +95,6 @@ for (const file of files) {
 
 list.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-writeFileSync(outFile, JSON.stringify({ list, posts }, null, 2));
-console.log(`✓ Generated blog data: ${list.length} posts → ${outFile}`);
+writeFileSync(listFile, JSON.stringify(list, null, 2));
+writeFileSync(postsFile, JSON.stringify(posts, null, 2));
+console.log(`✓ Generated blog data: ${list.length} posts → ${listFile} + ${postsFile}`);

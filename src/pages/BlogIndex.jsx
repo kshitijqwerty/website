@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
-import { list } from "../data/blogPosts.json";
+import list from "../data/blogList.json";
 
 export default function BlogIndex() {
   return (

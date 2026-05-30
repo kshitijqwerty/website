@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import ReadingProgress from "../components/ReadingProgress";
 import Lightbox from "../components/Lightbox";
-import { posts } from "../data/blogPosts.json";
+import posts from "../data/blogPosts.json";
 
 function estimateReadTime(html) {
   const text = html.replace(/<[^>]+>/g, "");

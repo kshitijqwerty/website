@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,9 +10,10 @@ import { AnimatePresence } from "framer-motion";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Navbar from "./components/Navbar";
 import AnimatedPage from "./components/AnimatedPage";
-import Home from "./pages/Home";
-import BlogIndex from "./pages/BlogIndex";
-import BlogPost from "./pages/BlogPost";
+
+const Home = lazy(() => import("./pages/Home"));
+const BlogIndex = lazy(() => import("./pages/BlogIndex"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
 
 function AppContent() {
   const location = useLocation();
@@ -33,7 +35,9 @@ export default function App() {
     <Router>
       <ErrorBoundary>
         <Navbar />
-        <AppContent />
+        <Suspense fallback={null}>
+          <AppContent />
+        </Suspense>
       </ErrorBoundary>
     </Router>
   );
