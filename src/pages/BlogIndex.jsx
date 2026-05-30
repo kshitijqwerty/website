@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 import list from "../data/blogList.json";
 
@@ -24,10 +23,9 @@ export default function BlogIndex() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {list.map((post) => (
-            <motion.div
+            <div
               key={post.slug}
-              whileHover={{ y: -4 }}
-              className="rounded-3xl border border-neutral-800 bg-neutral-900 p-7 flex flex-col"
+              className="rounded-3xl border border-neutral-800 bg-neutral-900 p-7 flex flex-col card-hover"
             >
               <div className="text-sm text-neutral-400 mb-4">
                 <time>{post.date}</time>
@@ -47,7 +45,7 @@ export default function BlogIndex() {
               >
                 Read Article →
               </Link>
-            </motion.div>
+            </div>
           ))}
         </div>
       </main>

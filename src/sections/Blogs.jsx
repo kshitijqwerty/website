@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 import SectionTitle from "../components/SectionTitle";
@@ -16,10 +15,9 @@ export default function Blogs() {
 
       <div className="grid md:grid-cols-3 gap-8">
         {latest.map((post) => (
-          <motion.div
+          <div
             key={post.slug}
-            whileHover={{ y: -4 }}
-            className="rounded-3xl border border-neutral-800 bg-neutral-900 p-7 flex flex-col"
+            className="rounded-3xl border border-neutral-800 bg-neutral-900 p-7 flex flex-col card-hover"
           >
             <div className="text-sm text-neutral-400 mb-3">
               <time>{post.date}</time>
@@ -39,7 +37,7 @@ export default function Blogs() {
             >
               Read Article →
             </Link>
-          </motion.div>
+          </div>
         ))}
       </div>
 

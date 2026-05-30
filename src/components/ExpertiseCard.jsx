@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-
 export default function ExpertiseCard({
   icon: Icon,
   title,
@@ -7,17 +5,9 @@ export default function ExpertiseCard({
   tech,
 }) {
   return (
-    <motion.div
-      className="rounded-3xl border border-neutral-800 bg-neutral-900 p-8 flex flex-col items-center text-center"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.03, y: -4 }}
-      transition={{
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-      }}
-      viewport={{ once: true }}
+    <div
+      className="rounded-3xl border border-neutral-800 bg-neutral-900 p-8 flex flex-col items-center text-center card-hover"
+      style={{ transform: "translateY(0)" }}
     >
       <div className="mb-5">
         <Icon size={38} />
@@ -34,6 +24,6 @@ export default function ExpertiseCard({
       <p className="text-sm text-neutral-400 mt-6">
         {tech}
       </p>
-    </motion.div>
+    </div>
   );
 }

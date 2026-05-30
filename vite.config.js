@@ -9,15 +9,11 @@ function nonBlockingCss() {
     transformIndexHtml: {
       order: 'post',
       handler(html) {
-        return html
-          .replace(
+        return html.replace(
             /<link rel="stylesheet"[^>]*href="([^"]+\.css)"[^>]*>/,
             (match, href) =>
               `<link rel="preload" as="style" href="${href}" onload="this.onload=null;this.rel='stylesheet'" />\n    <noscript>${match}</noscript>`
-          )
-          .replace(
-            /[ \t]*<link rel="modulepreload"[^>]*href="[^"]*vendor-framer[^"]*"[^>]*>\n/g,
-            '');
+          );
       },
     },
   }
@@ -34,7 +30,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-framer': ['framer-motion'],
           'vendor-icons': ['lucide-react'],
         },
       },

@@ -1,44 +1,47 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useTheme } from "../context/ThemeContext";
 
 export default function ReadingProgress({ articleRef }) {
-  const [progress, setProgress] = useState(0);
   const { resolved: theme } = useTheme();
-  const raf = useRef();
+  const barRef = useRef(null);
+  const isLight = theme === "light";
 
   useEffect(() => {
-    function update() {
-      const el = articleRef.current;
-      if (!el) {
-        setProgress(0);
-        return;
-      }
+    const el = articleRef.current;
+    if (!el || !barRef.current) return;
 
+    function update() {
+      if (!barRef.current) return;
       const { top, height } = el.getBoundingClientRect();
       const winH = window.innerHeight;
       const total = height - winH;
       const scrolled = -top;
-
-      setProgress(total > 0 ? Math.min(1, Math.max(0, scrolled / total)) : 0);
+      const pct = total > 0 ? Math.min(1, Math.max(0, scrolled / total)) : 0;
+      barRef.current.style.width = `${pct * 100}%`;
     }
 
-    function loop() {
-      update();
-      raf.current = requestAnimationFrame(loop);
+    let ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        update();
+        ticking = false;
+      });
     }
 
-    raf.current = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf.current);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    update();
+
+    return () => window.removeEventListener("scroll", onScroll);
   }, [articleRef]);
-
-  const isLight = theme === "light";
 
   return (
     <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] pointer-events-none">
       <div
+        ref={barRef}
         className="h-full"
         style={{
-          width: `${progress * 100}%`,
           backgroundColor: isLight ? "#404040" : "#e5e5e5",
           boxShadow: isLight
             ? "0 0 6px 2px rgba(0,0,0,0.15)"

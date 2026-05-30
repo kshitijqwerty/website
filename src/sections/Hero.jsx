@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-
 import Button from "../components/Button";
 import SocialLinks from "../components/SocialLinks";
 
@@ -12,14 +10,12 @@ export default function Hero() {
           Hello, I'm
         </p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-5xl md:text-7xl font-bold tracking-tight leading-tight font-heading"
+        <h1
+          className="text-5xl md:text-7xl font-bold tracking-tight leading-tight font-heading animate-page-enter"
+          style={{ animationDuration: "0.5s" }}
         >
           Kshitij Gupta
-        </motion.h1>
+        </h1>
 
         <p className="mt-8 text-lg text-neutral-400 leading-relaxed max-w-2xl">
           I build production AI systems — from on-device TFLite models
@@ -44,11 +40,9 @@ export default function Hero() {
       </div>
 
       {/* Right Image */}
-      <motion.div
-        className="flex justify-center md:justify-end"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
+      <div
+        className="flex justify-center md:justify-end animate-page-enter"
+        style={{ animationDuration: "0.6s", animationDelay: "0.1s" }}
       >
         <div className="w-60 h-60 md:w-80 md:h-80 rounded-full overflow-hidden border border-neutral-800 bg-neutral-900">
           <img
@@ -60,7 +54,7 @@ export default function Hero() {
             className="w-full h-full object-cover"
           />
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

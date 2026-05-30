@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Github, ExternalLink, Circle } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -6,6 +5,10 @@ export default function ProjectCard({ project }) {
   const [status, setStatus] = useState("checking");
 
   useEffect(() => {
+    if (!project.demo) {
+      setStatus("offline");
+      return;
+    }
     async function checkStatus() {
       try {
         await fetch(project.demo, {
@@ -28,10 +31,9 @@ export default function ProjectCard({ project }) {
       : "text-yellow-400";
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
+    <div
       className={[
-        "group rounded-3xl border border-neutral-800 bg-neutral-900 overflow-hidden transition-opacity flex flex-col",
+        "group rounded-3xl border border-neutral-800 bg-neutral-900 overflow-hidden transition-opacity flex flex-col card-hover-scale",
         status === "offline" ? "opacity-70" : "",
       ].join(" ")}
     >
@@ -116,6 +118,6 @@ export default function ProjectCard({ project }) {
           </a>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

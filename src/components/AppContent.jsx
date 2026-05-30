@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
 
 import AnimatedPage from "./AnimatedPage";
 
@@ -29,13 +28,11 @@ export default function AppContent() {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
-        <Route path="/blog" element={<AnimatedPage><BlogIndex /></AnimatedPage>} />
-        <Route path="/blog/:slug" element={<AnimatedPage><BlogPost /></AnimatedPage>} />
-        <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
-      </Routes>
-    </AnimatePresence>
+    <Routes location={location} key={location.pathname}>
+      <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
+      <Route path="/blog" element={<AnimatedPage><BlogIndex /></AnimatedPage>} />
+      <Route path="/blog/:slug" element={<AnimatedPage><BlogPost /></AnimatedPage>} />
+      <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
+    </Routes>
   );
 }

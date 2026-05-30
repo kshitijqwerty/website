@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 
 export default function CV() {
   const [showCV, setShowCV] = useState(false);
@@ -31,17 +30,15 @@ export default function CV() {
       </div>
 
       {showCV && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="rounded-3xl overflow-hidden border border-neutral-800 bg-neutral-900"
+        <div className="rounded-3xl overflow-hidden border border-neutral-800 bg-neutral-900 animate-page-enter"
+          style={{ animationDuration: "0.3s" }}
         >
           <iframe
             src="/kshitij_cv.pdf"
             title="CV Preview"
             className="w-full h-[800px]"
           />
-        </motion.div>
+          </div>
       )}
     </section>
   );
