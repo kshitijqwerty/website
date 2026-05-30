@@ -21,7 +21,7 @@ export default function Blogs() {
             whileHover={{ y: -4 }}
             className="rounded-3xl border border-neutral-800 bg-neutral-900 p-7 flex flex-col"
           >
-            <div className="text-sm text-neutral-500 mb-3">
+            <div className="text-sm text-neutral-400 mb-3">
               <time>{post.date}</time>
             </div>
 

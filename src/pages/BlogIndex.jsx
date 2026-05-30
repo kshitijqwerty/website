@@ -29,7 +29,7 @@ export default function BlogIndex() {
               whileHover={{ y: -4 }}
               className="rounded-3xl border border-neutral-800 bg-neutral-900 p-7 flex flex-col"
             >
-              <div className="text-sm text-neutral-500 mb-4">
+              <div className="text-sm text-neutral-400 mb-4">
                 <time>{post.date}</time>
               </div>
 

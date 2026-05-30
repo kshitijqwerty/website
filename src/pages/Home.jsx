@@ -25,7 +25,7 @@ export default function Home() {
         <Contact />
 
         {/* Footer */}
-        <footer className="py-10 border-t border-neutral-900 text-sm text-neutral-600">
+        <footer className="py-10 border-t border-neutral-900 text-sm text-neutral-400">
           © {new Date().getFullYear()} Kshitij Gupta
         </footer>
       </main>

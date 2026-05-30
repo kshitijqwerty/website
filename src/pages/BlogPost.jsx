@@ -32,12 +32,12 @@ function useCopyButtons(containerRef, theme) {
       const lang = pre.getAttribute("data-language") || "";
       const label = document.createElement("span");
       label.className =
-        "text-[0.75em] uppercase tracking-wide text-neutral-500";
+        "text-[0.75em] uppercase tracking-wide text-neutral-400";
       label.textContent = lang;
 
       const btn = document.createElement("button");
       btn.className =
-        "flex items-center justify-center w-6 h-6 max-sm:w-8 max-sm:h-8 rounded-md text-neutral-500 hover:text-white hover:bg-neutral-700/60 transition-colors";
+        "flex items-center justify-center w-6 h-6 max-sm:w-8 max-sm:h-8 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-700/60 transition-colors";
       btn.setAttribute("aria-label", "Copy code");
       btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
 
@@ -200,7 +200,7 @@ export default function BlogPost() {
       )}
       <ReadingProgress articleRef={contentRef} />
       <article className="max-w-4xl mx-auto">
-        <nav className="flex items-center gap-4 text-sm text-neutral-500 mb-12">
+        <nav className="flex items-center gap-4 text-sm text-neutral-400 mb-12">
           <Link
             to="/blog"
             className="text-neutral-400 hover:text-white transition-colors"
@@ -219,7 +219,7 @@ export default function BlogPost() {
         </nav>
 
         <header>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-500 mb-4">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-400 mb-4">
             <time>{post.date}</time>
             <span aria-hidden="true">·</span>
             <span>{readTime} min read</span>
@@ -248,7 +248,7 @@ export default function BlogPost() {
             ← All Posts
           </Link>
 
-          <span aria-hidden="true" className="text-neutral-600">·</span>
+          <span aria-hidden="true" className="text-neutral-400">·</span>
 
           <Link
             to="/"
