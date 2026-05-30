@@ -9,6 +9,9 @@ lerna-debug.log*
 
 node_modules
 dist
+
+# Generated from content/blog/*.md
+src/data/blogPosts.json
 dist-ssr
 *.local
 

@@ -6,6 +6,7 @@ import {
 
 import ErrorBoundary from "./components/ErrorBoundary";
 import Home from "./pages/Home";
+import BlogIndex from "./pages/BlogIndex";
 import BlogPost from "./pages/BlogPost";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
       <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/blog" element={<BlogIndex />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

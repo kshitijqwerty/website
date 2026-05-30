@@ -34,6 +34,142 @@ html {
   border-radius: 4px;
 }
 
+/* Article prose styles for blog posts */
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-neutral-100);
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+
+.article-content h2 {
+  font-size: 1.5rem;
+}
+
+.article-content h3 {
+  font-size: 1.25rem;
+}
+
+.article-content p {
+  line-height: 1.75;
+  margin-bottom: 1.25em;
+  color: var(--color-neutral-300);
+}
+
+.article-content ul,
+.article-content ol {
+  padding-left: 1.5em;
+  margin-bottom: 1.25em;
+  color: var(--color-neutral-300);
+}
+
+.article-content li {
+  margin-bottom: 0.25em;
+  line-height: 1.75;
+}
+
+.article-content ul li {
+  list-style-type: disc;
+}
+
+.article-content ul li::marker {
+  color: var(--color-neutral-600);
+}
+
+.article-content ol li {
+  list-style-type: decimal;
+}
+
+.article-content ol li::marker {
+  color: var(--color-neutral-600);
+}
+
+.article-content a {
+  color: var(--color-indigo-400);
+  text-decoration: none;
+}
+
+.article-content a:hover {
+  color: var(--color-indigo-300);
+}
+
+.article-content strong {
+  color: var(--color-neutral-200);
+}
+
+.article-content hr {
+  border-color: var(--color-neutral-800);
+  margin: 2em 0;
+}
+
+.article-content img {
+  border-radius: 12px;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5em 0;
+  border: 1px solid var(--color-neutral-800);
+}
+
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 0.95em;
+}
+
+.article-content th,
+.article-content td {
+  border: 1px solid var(--color-neutral-800);
+  padding: 0.6em 1em;
+  text-align: left;
+}
+
+.article-content th {
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-200);
+  font-weight: 600;
+}
+
+.article-content td {
+  color: var(--color-neutral-300);
+}
+
+.article-content blockquote {
+  border-left: 3px solid var(--color-neutral-700);
+  padding-left: 1.25em;
+  color: var(--color-neutral-400);
+  font-style: italic;
+  margin: 1.5em 0;
+}
+
+.article-content :not(pre) > code {
+  background: var(--color-neutral-800);
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+  font-size: 0.85em;
+  color: var(--color-neutral-200);
+}
+
+.article-content pre {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5em;
+  border: 1px solid var(--color-neutral-800);
+}
+
+.article-content pre code {
+  display: block;
+  padding: 1.25em;
+  overflow-x: auto;
+  font-size: 0.85em;
+  line-height: 1.6;
+}
+
 /* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *,

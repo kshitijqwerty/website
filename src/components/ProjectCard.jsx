@@ -13,7 +13,7 @@ export default function ProjectCard({ project }) {
           mode: "no-cors",
         });
         setStatus("online");
-      } catch (error) {
+      } catch {
         setStatus("offline");
       }
     }
