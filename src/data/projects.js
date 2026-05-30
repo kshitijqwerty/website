@@ -6,7 +6,7 @@ export const projects = [
 
     tech: "Python, FastAPI, React, Ollama, Next.js",
 
-    image: "/projects/ai_doc.png",
+    image: "/projects/ai_doc.jpg",
 
     demo: "https://ai-doc.kgup.me/",
 
@@ -69,7 +69,7 @@ export const projects = [
 
     tech: "Python, FastAPI, ChromaDB, PostgreSQL, GitHub Actions",
 
-    image: "/projects/llm_eval.png",
+    image: "/projects/llm_eval.jpg",
 
     demo: null,
 
@@ -99,7 +99,7 @@ export const projects = [
 
     tech: "Python, FastAPI, PyTorch, FAISS, CLIP, Streamlit",
 
-    image: "/projects/image_search.png",
+    image: "/projects/image_search.jpg",
 
     demo: null,
 

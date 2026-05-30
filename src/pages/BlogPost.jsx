@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { blogPosts } from "../data/blogPosts";
 
@@ -6,10 +7,31 @@ export default function BlogPost() {
 
   const post = blogPosts[slug];
 
+  useEffect(() => {
+    document.title = post
+      ? `${post.title} — Kshitij Gupta`
+      : "Post not found — Kshitij Gupta";
+
+    return () => {
+      document.title = "Kshitij Gupta";
+    };
+  }, [post]);
+
   if (!post) {
     return (
-      <div className="min-h-screen bg-neutral-950 text-white p-10">
-        Post not found.
+      <div className="min-h-screen bg-neutral-950 text-neutral-100 flex items-center justify-center px-6">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold font-heading mb-4">Post not found</h1>
+          <p className="text-neutral-400 mb-8">
+            The blog post you're looking for doesn't exist.
+          </p>
+          <Link
+            to="/"
+            className="px-6 py-3 rounded-2xl bg-white text-black font-medium hover:opacity-90 transition-opacity inline-block"
+          >
+            Back to Home
+          </Link>
+        </div>
       </div>
     );
   }

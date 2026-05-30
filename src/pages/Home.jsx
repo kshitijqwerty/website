@@ -15,7 +15,7 @@ export default function Home() {
       <Navbar />
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-6 md:px-10">
+      <main id="main-content" className="max-w-6xl mx-auto px-6 md:px-10">
         <Hero />
 
         <Expertise />

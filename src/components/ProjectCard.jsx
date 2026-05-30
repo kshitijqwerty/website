@@ -40,6 +40,9 @@ export default function ProjectCard({ project }) {
         <img
           src={project.image}
           alt={project.title}
+          loading="lazy"
+          width={800}
+          height={450}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
@@ -74,7 +77,7 @@ export default function ProjectCard({ project }) {
 
         <p className="text-neutral-400 mt-3 leading-relaxed">{project.desc}</p>
 
-        <p className="text-sm text-neutral-500 mt-5">{project.tech}</p>
+        <p className="text-sm text-neutral-400 mt-5">{project.tech}</p>
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mt-5">

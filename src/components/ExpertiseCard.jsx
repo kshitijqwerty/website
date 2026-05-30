@@ -31,7 +31,7 @@ export default function ExpertiseCard({
         {description}
       </p>
 
-      <p className="text-sm text-neutral-500 mt-6">
+      <p className="text-sm text-neutral-400 mt-6">
         {tech}
       </p>
     </motion.div>

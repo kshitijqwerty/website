@@ -53,7 +53,7 @@ export default function Hero() {
         <div className="w-60 h-60 md:w-80 md:h-80 rounded-full overflow-hidden border border-neutral-800 bg-neutral-900">
           <img
             src="/profile.jpg"
-            alt="Profile"
+            alt="Kshitij Gupta portrait" loading="lazy"
             className="w-full h-full object-cover"
           />
         </div>
