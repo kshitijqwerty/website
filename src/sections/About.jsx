@@ -7,7 +7,7 @@ export default function About() {
 
   return (
     <section className="py-24 max-w-3xl">
-      <h2 className="text-4xl font-bold mb-6">About Me</h2>
+      <h2 className="text-4xl font-bold mb-6 font-heading">About Me</h2>
 
       <p className="text-neutral-400 leading-relaxed text-lg mb-6">
         I'm an ML Engineer with 4 years of production experience

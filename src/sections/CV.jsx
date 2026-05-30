@@ -6,7 +6,7 @@ export default function CV() {
 
   return (
     <section id="cv" className="py-24">
-      <h2 className="text-4xl font-bold mb-6">CV</h2>
+      <h2 className="text-4xl font-bold mb-6 font-heading">CV</h2>
 
       <p className="text-neutral-400 mb-8 max-w-2xl">
         You can preview my CV directly on the page or

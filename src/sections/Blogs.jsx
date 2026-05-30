@@ -45,7 +45,7 @@ export default function Blogs() {
               {post.date}
             </p>
 
-            <h3 className="text-xl font-semibold mt-3">
+            <h3 className="text-xl font-semibold mt-3 font-heading">
               {post.title}
             </h3>
 

@@ -16,7 +16,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-5xl md:text-7xl font-bold tracking-tight leading-tight"
+          className="text-5xl md:text-7xl font-bold tracking-tight leading-tight font-heading"
         >
           Kshitij Gupta
         </motion.h1>

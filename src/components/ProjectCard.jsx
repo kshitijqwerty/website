@@ -70,7 +70,7 @@ export default function ProjectCard({ project }) {
 
       {/* Content */}
       <div className="p-7 flex flex-col flex-1">
-        <h3 className="text-2xl font-semibold">{project.title}</h3>
+        <h3 className="text-2xl font-semibold font-heading">{project.title}</h3>
 
         <p className="text-neutral-400 mt-3 leading-relaxed">{project.desc}</p>
 

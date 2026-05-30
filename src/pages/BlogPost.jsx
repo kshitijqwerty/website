@@ -24,7 +24,7 @@ export default function BlogPost() {
           ← Back
         </Link>
 
-        <h1 className="text-4xl md:text-5xl font-bold mt-6">
+        <h1 className="text-4xl md:text-5xl font-bold mt-6 font-heading">
           {post.title}
         </h1>
 

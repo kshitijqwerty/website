@@ -23,7 +23,7 @@ export default function ExpertiseCard({
         <Icon size={38} />
       </div>
 
-      <h3 className="text-xl font-semibold">
+      <h3 className="text-xl font-semibold font-heading">
         {title}
       </h3>
 
