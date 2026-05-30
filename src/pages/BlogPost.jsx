@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { useTheme } from "../context/ThemeContext";
+import ReadingProgress from "../components/ReadingProgress";
 import { posts } from "../data/blogPosts.json";
 
 function estimateReadTime(html) {
@@ -144,6 +145,7 @@ export default function BlogPost() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 px-6 md:px-10 py-20">
+      <ReadingProgress articleRef={contentRef} />
       <article className="max-w-4xl mx-auto">
         <nav className="flex items-center gap-4 text-sm text-neutral-500 mb-12">
           <Link
