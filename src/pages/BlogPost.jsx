@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { useTheme } from "../context/useTheme";
-import ReadingProgress from "../components/ReadingProgress";
 import Lightbox from "../components/Lightbox";
 import posts from "../data/blogPosts.json";
 
@@ -198,7 +197,6 @@ export default function BlogPost() {
       {lightboxSrc && (
         <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
       )}
-      <ReadingProgress articleRef={contentRef} />
       <article className="max-w-4xl mx-auto">
         <nav className="flex items-center gap-4 text-sm text-neutral-400 mb-12">
           <Link

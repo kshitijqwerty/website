@@ -1,43 +1,38 @@
 import { useEffect, useRef } from "react";
 import { useTheme } from "../context/useTheme";
 
-export default function ReadingProgress({ articleRef }) {
+export default function ReadingProgress() {
   const { resolved: theme } = useTheme();
   const barRef = useRef(null);
   const isLight = theme === "light";
 
   useEffect(() => {
-    const el = articleRef.current;
-    if (!el || !barRef.current) return;
+    const bar = barRef.current;
+    if (!bar) return;
 
     function update() {
-      if (!barRef.current) return;
+      const el = document.querySelector(".article-content");
+      if (!el) return;
       const { top, height } = el.getBoundingClientRect();
       const winH = window.innerHeight;
       const total = height - winH;
       const scrolled = -top;
       const pct = total > 0 ? Math.min(1, Math.max(0, scrolled / total)) : 0;
-      barRef.current.style.width = `${pct * 100}%`;
+      bar.style.width = `${pct * 100}%`;
     }
 
-    let ticking = false;
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        update();
-        ticking = false;
-      });
-    }
-
-    window.addEventListener("scroll", onScroll, { passive: true });
     update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
 
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [articleRef]);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] pointer-events-none">
+    <div className="fixed top-0 left-0 right-0 z-[70] h-[3px] pointer-events-none">
       <div
         ref={barRef}
         className="h-full"

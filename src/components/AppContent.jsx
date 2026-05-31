@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 import AnimatedPage from "./AnimatedPage";
+import ReadingProgress from "./ReadingProgress";
 
 const Home = lazy(() => import("../pages/Home"));
 const BlogIndex = lazy(() => import("../pages/BlogIndex"));
@@ -31,7 +32,7 @@ export default function AppContent() {
     <Routes location={location} key={location.pathname}>
       <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
       <Route path="/blog" element={<AnimatedPage><BlogIndex /></AnimatedPage>} />
-      <Route path="/blog/:slug" element={<AnimatedPage><BlogPost /></AnimatedPage>} />
+      <Route path="/blog/:slug" element={<><ReadingProgress /><AnimatedPage><BlogPost /></AnimatedPage></>} />
       <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
     </Routes>
   );
