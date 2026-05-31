@@ -21,7 +21,7 @@ function nonBlockingCss() {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), nonBlockingCss()],
-  base: './',
+  base: '/',
   build: {
     target: 'esnext',
     cssMinify: 'esbuild',
