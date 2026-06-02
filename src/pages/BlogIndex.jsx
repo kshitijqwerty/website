@@ -10,42 +10,41 @@ export default function BlogIndex() {
           to="/"
           className="text-sm text-neutral-400 hover:text-white transition-colors inline-block mb-12"
         >
-          ← Back to Home
+          ← Home
         </Link>
 
-        <h1 className="text-4xl md:text-5xl font-bold font-heading mb-4">
-          All Posts
-        </h1>
+        <div className="mb-14">
+          <h1 className="text-5xl md:text-6xl font-bold font-heading mb-3">
+            Blog
+          </h1>
+          <p className="text-neutral-400 max-w-2xl text-lg">
+            Notes on backend engineering, machine learning, and distributed systems.
+          </p>
+        </div>
 
-        <p className="text-neutral-400 mb-16 max-w-2xl text-lg">
-          Thoughts on backend engineering, machine learning, and scalable systems.
-        </p>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {list.map((post) => (
-            <div
+            <Link
               key={post.slug}
-              className="rounded-3xl border border-neutral-800 bg-neutral-900 p-7 flex flex-col card-hover"
+              to={`/blog/${post.slug}`}
+              className="group block rounded-3xl border border-neutral-800 bg-neutral-900/50 p-7 card-hover border-t-2 border-t-violet-500/30 hover:border-t-violet-400/60 transition-colors"
             >
-              <div className="text-sm text-neutral-400 mb-4">
+              <div className="text-xs text-neutral-500 mb-4">
                 <time>{post.date}</time>
               </div>
 
-              <h2 className="text-xl font-semibold font-heading leading-snug">
+              <h2 className="text-xl font-semibold font-heading leading-snug group-hover:text-violet-300 transition-colors">
                 {post.title}
               </h2>
 
-              <p className="text-neutral-400 mt-4 leading-relaxed flex-1">
+              <p className="text-neutral-400 mt-3 leading-relaxed text-sm">
                 {post.description}
               </p>
 
-              <Link
-                to={`/blog/${post.slug}`}
-                className="inline-flex items-center gap-1 mt-6 text-indigo-400 hover:text-indigo-300 transition-colors"
-              >
-                Read Article →
-              </Link>
-            </div>
+              <span className="inline-flex items-center gap-1 mt-5 text-sm text-violet-400 group-hover:text-violet-300 transition-colors">
+                Read post →
+              </span>
+            </Link>
           ))}
         </div>
       </main>

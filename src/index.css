@@ -7,6 +7,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 7rem;
   background-color: var(--color-neutral-950);
 }
 
@@ -304,6 +305,29 @@ body {
 
 .card-hover-scale:hover {
   transform: scale(1.02);
+}
+
+/* TOC sidebar custom scrollbar */
+.toc-sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-700) transparent;
+}
+
+.toc-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc-sidebar::-webkit-scrollbar-thumb {
+  background-color: var(--color-neutral-700);
+  border-radius: 999px;
+}
+
+.toc-sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-neutral-500);
 }
 
 /* Respect reduced motion preferences */

@@ -7,6 +7,8 @@ import ReadingProgress from "./ReadingProgress";
 const Home = lazy(() => import("../pages/Home"));
 const BlogIndex = lazy(() => import("../pages/BlogIndex"));
 const BlogPost = lazy(() => import("../pages/BlogPost"));
+const DeepDivesIndex = lazy(() => import("../pages/DeepDivesIndex"));
+const DeepDives = lazy(() => import("../pages/DeepDives"));
 
 function NotFound() {
   return (
@@ -33,6 +35,8 @@ export default function AppContent() {
       <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
       <Route path="/blog" element={<AnimatedPage><BlogIndex /></AnimatedPage>} />
       <Route path="/blog/:slug" element={<><ReadingProgress /><AnimatedPage><BlogPost /></AnimatedPage></>} />
+      <Route path="/learning" element={<AnimatedPage><DeepDivesIndex /></AnimatedPage>} />
+      <Route path="/learning/:slug" element={<AnimatedPage><DeepDives /></AnimatedPage>} />
       <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
     </Routes>
   );

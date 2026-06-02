@@ -10,6 +10,7 @@ export default function Navbar() {
 
   const linkDefs = [
     { href: isHome ? "#" : "/", label: "Home" },
+    { href: "/learning", label: "Learning" },
     { href: isHome ? "#blog" : "/#blog", label: "Blogs" },
     { href: isHome ? "#projects" : "/#projects", label: "Projects" },
     { href: isHome ? "#cv" : "/#cv", label: "CV" },

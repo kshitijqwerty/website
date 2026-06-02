@@ -10,34 +10,32 @@ export default function Blogs() {
     <section id="blog" className="py-24">
       <SectionTitle
         title="Blog & Writing"
-        subtitle="Thoughts on backend engineering, machine learning, and scalable systems."
+        subtitle="Notes on backend engineering, machine learning, and distributed systems."
       />
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-3 gap-6">
         {latest.map((post) => (
-          <div
+          <Link
             key={post.slug}
-            className="rounded-3xl border border-neutral-800 bg-neutral-900 p-7 flex flex-col card-hover"
+            to={`/blog/${post.slug}`}
+            className="group block rounded-3xl border border-neutral-800 bg-neutral-900/50 p-7 card-hover border-t-2 border-t-violet-500/30 hover:border-t-violet-400/60 transition-colors"
           >
-            <div className="text-sm text-neutral-400 mb-3">
+            <div className="text-xs text-neutral-500 mb-4">
               <time>{post.date}</time>
             </div>
 
-            <h3 className="text-xl font-semibold font-heading leading-snug">
+            <h3 className="text-xl font-semibold font-heading leading-snug group-hover:text-violet-300 transition-colors">
               {post.title}
             </h3>
 
-            <p className="text-neutral-400 mt-4 leading-relaxed flex-1">
+            <p className="text-neutral-400 mt-3 leading-relaxed text-sm">
               {post.description}
             </p>
 
-            <Link
-              to={`/blog/${post.slug}`}
-              className="inline-flex items-center gap-1 mt-6 text-indigo-400 hover:text-indigo-300 transition-colors"
-            >
-              Read Article →
-            </Link>
-          </div>
+            <span className="inline-flex items-center gap-1 mt-5 text-sm text-violet-400 group-hover:text-violet-300 transition-colors">
+              Read post →
+            </span>
+          </Link>
         ))}
       </div>
 
