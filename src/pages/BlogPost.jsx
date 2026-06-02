@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { useTheme } from "../context/useTheme";
 import Lightbox from "../components/Lightbox";
 import posts from "../data/blogPosts.json";
+import { useBookmarks } from "../hooks/useBookmarks";
 
 function estimateReadTime(html) {
   const text = html.replace(/<[^>]+>/g, "");
@@ -105,6 +106,7 @@ export default function BlogPost() {
 
   const post = posts[slug];
   const [lightboxSrc, setLightboxSrc] = useState(null);
+  const { isBookmarked, toggle } = useBookmarks("blog");
 
   useCopyButtons(contentRef, theme);
 
@@ -218,14 +220,34 @@ export default function BlogPost() {
 
         <header>
           <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-400 mb-4">
-            <time>{post.date}</time>
+            <time>{new Date(post.date + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</time>
             <span aria-hidden="true">·</span>
             <span>{readTime} min read</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight font-heading">
-            {post.title}
-          </h1>
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight font-heading">
+              {post.title}
+            </h1>
+            <button
+              onClick={() => toggle(slug)}
+              className="shrink-0 mt-1.5 p-1.5 rounded-lg hover:bg-neutral-800 transition-colors"
+              aria-label={isBookmarked(slug) ? "Remove bookmark" : "Bookmark this post"}
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill={isBookmarked(slug) ? "#a78bfa" : "none"}
+                stroke={isBookmarked(slug) ? "#a78bfa" : "currentColor"}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+              </svg>
+            </button>
+          </div>
         </header>
 
         <hr className="border-neutral-800 my-10" />

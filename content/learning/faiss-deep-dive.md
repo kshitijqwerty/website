@@ -1,4 +1,8 @@
-# FAISS: A Deep Technical Reference
+---
+title: "FAISS: A Deep Technical Reference"
+description: "A thorough walkthrough of FAISS — Meta's library for efficient similarity search and dense vector clustering. Covers architecture, quantization, indexing, search flow, and production scaling."
+published: true
+---
 
 > **Facebook AI Similarity Search** — efficient similarity search and clustering of dense vectors.
 

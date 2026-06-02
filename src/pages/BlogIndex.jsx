@@ -1,8 +1,25 @@
 import { Link } from "react-router-dom";
 
 import list from "../data/blogList.json";
+import { useBookmarks } from "../hooks/useBookmarks";
+
+function formatDate(iso) {
+  if (!iso) return "";
+  return new Date(iso + "T00:00:00").toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
 
 export default function BlogIndex() {
+  const { isBookmarked } = useBookmarks("blog");
+  const sorted = [...list].sort((a, b) => {
+    const aBm = isBookmarked(a.slug) ? 0 : 1;
+    const bBm = isBookmarked(b.slug) ? 0 : 1;
+    if (aBm !== bBm) return aBm - bBm;
+    return b.date.localeCompare(a.date);
+  });
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
       <main className="max-w-6xl mx-auto px-6 md:px-10 py-20">
@@ -23,14 +40,30 @@ export default function BlogIndex() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {list.map((post) => (
+          {sorted.map((post) => (
             <Link
               key={post.slug}
               to={`/blog/${post.slug}`}
-              className="group block rounded-3xl border border-neutral-800 bg-neutral-900/50 p-7 card-hover border-t-2 border-t-violet-500/30 hover:border-t-violet-400/60 transition-colors"
+              className="group relative block rounded-3xl border border-neutral-800 bg-neutral-900/50 p-7 card-hover border-t-2 border-t-violet-500/30 hover:border-t-violet-400/60 transition-colors"
             >
+              {isBookmarked(post.slug) && (
+                <span className="absolute top-4 right-4" aria-label="Bookmarked">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="#a78bfa"
+                    stroke="#a78bfa"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                  </svg>
+                </span>
+              )}
               <div className="text-xs text-neutral-500 mb-4">
-                <time>{post.date}</time>
+                <time>{formatDate(post.date)}</time>
               </div>
 
               <h2 className="text-xl font-semibold font-heading leading-snug group-hover:text-violet-300 transition-colors">

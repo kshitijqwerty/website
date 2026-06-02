@@ -4,8 +4,8 @@
   "version": "1.1.1",
   "type": "module",
   "scripts": {
-    "prebuild": "node scripts/generate-blog-data.js && node scripts/generate-sitemap.js",
-    "predev": "node scripts/generate-blog-data.js && node scripts/generate-sitemap.js",
+    "prebuild": "node scripts/generate-learning-data.js && node scripts/generate-blog-data.js && node scripts/generate-sitemap.js",
+    "predev": "node scripts/generate-learning-data.js && node scripts/generate-blog-data.js && node scripts/generate-sitemap.js",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",

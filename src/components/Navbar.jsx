@@ -11,7 +11,7 @@ export default function Navbar() {
   const linkDefs = [
     { href: isHome ? "#" : "/", label: "Home" },
     { href: "/learning", label: "Learning" },
-    { href: isHome ? "#blog" : "/#blog", label: "Blogs" },
+    { href: "/blog", label: "Blogs" },
     { href: isHome ? "#projects" : "/#projects", label: "Projects" },
     { href: isHome ? "#cv" : "/#cv", label: "CV" },
     { href: isHome ? "#contact" : "/#contact", label: "Contact" },
@@ -39,7 +39,7 @@ export default function Navbar() {
               <Tag
                 key={label}
                 {...props}
-                aria-current={href.replace("/", "") === hash ? "section" : undefined}
+                aria-current={href.includes("#") ? (href.replace("/", "") === hash ? "section" : undefined) : (href === pathname || (href !== "/" && pathname.startsWith(href + "/")) ? "section" : undefined)}
                 className={linkClass}
                 onClick={handleNav}
               >
@@ -96,7 +96,9 @@ export default function Navbar() {
               {linkDefs.map(({ href, label }) => {
                 const Tag = isHome ? "a" : Link;
                 const props = isHome ? { href } : { to: href };
-                const active = href.replace("/", "") === hash;
+                const active = href.includes("#")
+                  ? href.replace("/", "") === hash
+                  : href === pathname || (href !== "/" && pathname.startsWith(href + "/"));
                 return (
                   <Tag
                     key={label}

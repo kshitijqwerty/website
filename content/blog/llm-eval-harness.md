@@ -1,6 +1,6 @@
 ---
 title: "Building llm-eval-harness: A Production-Grade LLM Evaluation Pipeline with Free-Tier Tools"
-date: "May 2026"
+date: "2026-05-22"
 slug: "building-llm-eval-harness"
 description: "How I went from zero LLM eval experience to shipping a production-grade RAG evaluation harness using only free-tier tools — and what every design decision taught me about building AI systems that can be trusted."
 tags: [llm, evaluation, rag, mlops, python, fastapi, testing]

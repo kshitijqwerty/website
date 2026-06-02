@@ -1,22 +1,23 @@
 [
   {
-    "slug": "building-onnxlab",
-    "title": "Building ONNXLab: Understanding ONNX by Building a Browser-Based Visualization and Inference Platform",
-    "date": "May 2026",
-    "description": "How I built a browser-native ONNX model visualization and inference platform using ONNX Runtime Web",
+    "slug": "building-llm-eval-harness",
+    "title": "Building llm-eval-harness: A Production-Grade LLM Evaluation Pipeline with Free-Tier Tools",
+    "date": "2026-05-22",
+    "description": "How I went from zero LLM eval experience to shipping a production-grade RAG evaluation harness using only free-tier tools — and what every design decision taught me about building AI systems that can be trusted.",
     "tags": [
-      "nextjs",
-      "onnx",
-      "machine-learning",
-      "webgpu",
-      "react-flow",
-      "visualization"
+      "llm",
+      "evaluation",
+      "rag",
+      "mlops",
+      "python",
+      "fastapi",
+      "testing"
     ]
   },
   {
     "slug": "image-search-faiss",
     "title": "Building a Semantic Image Search Engine with CLIP and FAISS",
-    "date": "May 2026",
+    "date": "2026-05-18",
     "description": "How I built a production-style semantic image similarity search system — from CLIP embeddings and FAISS indexing to a FastAPI service layer and Streamlit dashboard.",
     "tags": [
       "backend",
@@ -28,18 +29,17 @@
     ]
   },
   {
-    "slug": "building-llm-eval-harness",
-    "title": "Building llm-eval-harness: A Production-Grade LLM Evaluation Pipeline with Free-Tier Tools",
-    "date": "May 2026",
-    "description": "How I went from zero LLM eval experience to shipping a production-grade RAG evaluation harness using only free-tier tools — and what every design decision taught me about building AI systems that can be trusted.",
+    "slug": "building-onnxlab",
+    "title": "Building ONNXLab: Understanding ONNX by Building a Browser-Based Visualization and Inference Platform",
+    "date": "2026-05-15",
+    "description": "How I built a browser-native ONNX model visualization and inference platform using ONNX Runtime Web",
     "tags": [
-      "llm",
-      "evaluation",
-      "rag",
-      "mlops",
-      "python",
-      "fastapi",
-      "testing"
+      "nextjs",
+      "onnx",
+      "machine-learning",
+      "webgpu",
+      "react-flow",
+      "visualization"
     ]
   }
 ]

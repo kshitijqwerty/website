@@ -1,6 +1,6 @@
 ---
 title: "Building a Semantic Image Search Engine with CLIP and FAISS"
-date: "May 2026"
+date: "2026-05-18"
 slug: "image-search-faiss"
 description: "How I built a production-style semantic image similarity search system — from CLIP embeddings and FAISS indexing to a FastAPI service layer and Streamlit dashboard."
 tags: [backend, machine-learning, computer-vision, python, architecture, vector-search]

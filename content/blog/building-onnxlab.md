@@ -1,6 +1,6 @@
 ---
 title: "Building ONNXLab: Understanding ONNX by Building a Browser-Based Visualization and Inference Platform"
-date: "May 2026"
+date: "2026-05-15"
 slug: "building-onnxlab"
 description: "How I built a browser-native ONNX model visualization and inference platform using ONNX Runtime Web"
 tags: [nextjs, onnx, machine-learning, webgpu, react-flow, visualization]

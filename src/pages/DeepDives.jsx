@@ -1,34 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { marked } from "marked";
-import { markedHighlight } from "marked-highlight";
-import hljs from "highlight.js";
-import "highlight.js/styles/atom-one-dark.css";
 
 import { useTheme } from "../context/useTheme";
 import Lightbox from "../components/Lightbox";
-import { deepDives } from "../data/deepDives";
-
-marked.use(
-  markedHighlight({
-    langPrefix: "hljs language-",
-    highlight(code, lang) {
-      if (lang && hljs.getLanguage(lang)) {
-        return hljs.highlight(code, { language: lang }).value;
-      }
-      return code;
-    },
-  })
-);
-
-
-
-function slugify(text) {
-  return text
-    .toLowerCase()
-    .replace(/[^\w]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
+import posts from "../data/learningPosts.json";
+import { useBookmarks } from "../hooks/useBookmarks";
 
 function useCopyButtons(containerRef) {
   useEffect(() => {
@@ -128,103 +104,13 @@ export default function DeepDives() {
   const { slug } = useParams();
   const { resolved: theme } = useTheme();
   const contentRef = useRef(null);
-  const [mdHtml, setMdHtml] = useState("");
-  const [toc, setToc] = useState([]);
-  const [activeId, setActiveId] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [lightboxSrc, setLightboxSrc] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const entry = deepDives.find((d) => d.slug === slug);
+  const { isBookmarked, toggle } = useBookmarks("learning");
 
-  useEffect(() => {
-    if (!entry) {
-      setLoading(false);
-      setError("Deep dive not found");
-      return;
-    }
+  const post = posts[slug];
 
-    setLoading(true);
-    setError(null);
-
-    fetch(`/learning/${slug}.md`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load deep dive");
-        return res.text();
-      })
-      .then((raw) => {
-        const mermaidBlocks = [];
-        const preprocessed = raw.replace(
-          /```mermaid\n([\s\S]*?)\n```/g,
-          (_, code) => {
-            const id = `<!--MERMAID_${mermaidBlocks.length}-->`;
-            mermaidBlocks.push(code.trim());
-            return id;
-          }
-        );
-
-        let html = marked.parse(preprocessed, { gfm: true });
-
-        html = html.replace(/<!--MERMAID_(\d+)-->/g, (_, idx) => {
-          const code = mermaidBlocks[Number(idx)];
-          const escaped = code
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;");
-          return `<pre class="mermaid-pre"><div class="mermaid">\n${escaped}\n</div></pre>`;
-        });
-
-        const counter = {};
-        const tocItems = [];
-
-        html = html.replace(
-          /<h([2-3])(\s[^>]*)?>(.*?)<\/h[2-3]>/gs,
-          (match, level, attrs, content) => {
-            const plainText = content.replace(/<[^>]+>/g, "");
-            let id = slugify(plainText);
-            if (counter[id]) {
-              counter[id]++;
-              id = `${id}-${counter[id]}`;
-            } else {
-              counter[id] = 1;
-            }
-            tocItems.push({ depth: Number(level), text: plainText, id });
-            return `<h${level} id="${id}">${content}</h${level}>`;
-          }
-        );
-
-        setToc(tocItems);
-        setMdHtml(html);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, [slug, entry]);
-
-  useEffect(() => {
-    const container = contentRef.current;
-    if (!container) return;
-    const headings = container.querySelectorAll("h2, h3");
-    if (!headings.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-            break;
-          }
-        }
-      },
-      { rootMargin: "-80px 0px -80% 0px" }
-    );
-
-    headings.forEach((h) => observer.observe(h));
-    return () => observer.disconnect();
-  }, [mdHtml]);
+  useCopyButtons(contentRef);
 
   useEffect(() => {
     const container = contentRef.current;
@@ -262,7 +148,7 @@ export default function DeepDives() {
         });
       });
     });
-  }, [mdHtml, theme]);
+  }, [slug, theme]);
 
   useEffect(() => {
     const container = contentRef.current;
@@ -272,32 +158,22 @@ export default function DeepDives() {
     imgs.forEach((img) => img.addEventListener("click", onClick));
     return () =>
       imgs.forEach((img) => img.removeEventListener("click", onClick));
-  }, [mdHtml, lightboxSrc]);
-
-  useCopyButtons(contentRef);
+  }, [slug]);
 
   useEffect(() => {
     setSidebarOpen(false);
   }, [slug]);
 
   useEffect(() => {
-    document.title = entry
-      ? `${entry.title} — Kshitij Gupta`
-      : "Deep Dives — Kshitij Gupta";
+    document.title = post
+      ? `${post.title} — Kshitij Gupta`
+      : "Field Notes — Kshitij Gupta";
     return () => {
       document.title = "Kshitij Gupta";
     };
-  }, [entry]);
+  }, [post]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-neutral-950 text-neutral-100 flex items-center justify-center px-6">
-        <p className="text-neutral-400 animate-pulse">Loading…</p>
-      </div>
-    );
-  }
-
-  if (!entry || error) {
+  if (!post) {
     return (
       <div className="min-h-screen bg-neutral-950 text-neutral-100 flex items-center justify-center px-6">
         {lightboxSrc && (
@@ -305,16 +181,16 @@ export default function DeepDives() {
         )}
         <div className="text-center">
           <h1 className="text-4xl font-bold font-heading mb-4">
-            {error || "Deep dive not found"}
+            Note not found
           </h1>
           <p className="text-neutral-400 mb-8">
-            The deep dive you&apos;re looking for doesn&apos;t exist.
+            The note you&apos;re looking for doesn&apos;t exist.
           </p>
           <Link
             to="/learning"
             className="btn-primary bg-white text-black px-6 py-3 rounded-2xl font-medium hover:opacity-90 transition-opacity inline-block"
           >
-            Browse all deep dives
+            Browse all notes
           </Link>
         </div>
       </div>
@@ -333,7 +209,7 @@ export default function DeepDives() {
             to="/learning"
             className="text-neutral-400 hover:text-white transition-colors"
           >
-            ← Deep Dives
+            ← Field Notes
           </Link>
           <span aria-hidden="true">·</span>
           <Link
@@ -366,38 +242,38 @@ export default function DeepDives() {
         </button>
 
         <div className="flex gap-12 relative">
+          {sidebarOpen && (
+            <div
+              className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
           <aside
             className={`
-              lg:sticky lg:top-24 lg:block lg:w-64 lg:flex-shrink-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto toc-sidebar
               ${sidebarOpen ? "block" : "hidden"}
-              w-full mb-8 lg:mb-0
+              lg:block lg:sticky lg:top-24 lg:w-64 lg:flex-shrink-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:bg-transparent
+              fixed inset-x-0 top-20 bottom-0 z-40 bg-neutral-950 overflow-y-auto
+              w-full toc-sidebar
             `}
           >
-            <nav aria-label="Table of contents">
-              <h2 className="text-sm font-semibold text-neutral-400 uppercase tracking-wider mb-4">
-                Contents
-              </h2>
-              <ul className="space-y-1">
-                {toc.map((item) => (
+            <nav aria-label="Table of contents" className="toc-nav">
+              <h2 className="toc-heading">On this page</h2>
+              <ul>
+                {post.toc.map((item) => (
                   <li key={item.id}>
                     <a
                       href={`#${item.id}`}
                       onClick={(e) => {
                         e.preventDefault();
-                        document
-                          .getElementById(item.id)
-                          ?.scrollIntoView({ behavior: "smooth" });
-                        setSidebarOpen(false);
-                      }}
-                      className={`
-                        block text-sm py-1 transition-colors
-                        ${item.depth === 3 ? "pl-4" : ""}
-                        ${
-                          activeId === item.id
-                            ? "text-emerald-400 font-medium"
-                            : "text-neutral-400 hover:text-neutral-200"
+                        const el = document.getElementById(item.id);
+                        if (el) {
+                          window.scrollTo({
+                            top: el.getBoundingClientRect().top + window.scrollY - (parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 112),
+                          });
                         }
-                      `}
+                        requestAnimationFrame(() => setSidebarOpen(false));
+                      }}
+                      className={`toc-link ${item.depth === 3 ? "toc-link-h3" : ""}`}
                     >
                       {item.text}
                     </a>
@@ -409,18 +285,39 @@ export default function DeepDives() {
 
           <article className="flex-1 min-w-0">
             <header className="mb-10">
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight font-heading">
-                {entry.title}
-              </h1>
+              <div className="flex items-start justify-between gap-4">
+                <h1 className="text-4xl md:text-5xl font-bold leading-tight font-heading">
+                  {post.title}
+                </h1>
+                <button
+                  onClick={() => toggle(slug)}
+                  className="shrink-0 mt-1.5 p-1.5 rounded-lg hover:bg-neutral-800 transition-colors"
+                   aria-label={isBookmarked(slug) ? "Remove bookmark" : "Bookmark this note"}
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill={isBookmarked(slug) ? "#34d399" : "none"}
+                    stroke={isBookmarked(slug) ? "#34d399" : "currentColor"}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-colors"
+                  >
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                  </svg>
+                </button>
+              </div>
               <p className="text-neutral-400 mt-4 text-lg max-w-3xl">
-                {entry.description}
+                {post.description}
               </p>
             </header>
 
             <div
               ref={contentRef}
               className="article-content text-lg"
-              dangerouslySetInnerHTML={{ __html: mdHtml }}
+              dangerouslySetInnerHTML={{ __html: post.html }}
             />
           </article>
         </div>
