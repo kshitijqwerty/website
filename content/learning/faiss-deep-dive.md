@@ -10,60 +10,41 @@ published: true
 
 ## Table of Contents
 
-**Part I — Foundations**
-
-1. [Architecture Overview](#1-architecture-overview)
-2. [Quantization Fundamentals](#2-quantization-fundamentals)
-3. [Distance Metrics Reference](#3-distance-metrics-reference)
-
-**Part II — Index Building Blocks**
-
-4. [Product Quantization (PQ)](#4-product-quantization-pq)
-5. [Inverted File Index (IVF)](#5-inverted-file-index-ivf)
-6. [IVFPQ: IVF + PQ](#6-ivfpq-ivf--pq)
-7. [HNSW: Hierarchical Navigable Small World](#7-hnsw-hierarchical-navigable-small-world)
-8. [Binary Indexes](#8-binary-indexes)
-
-**Part III — Quantizers In Depth**
-
-9. [Quantizer Types in FAISS](#9-quantizer-types-in-faiss)
-10. [Residual Quantizer (RQ / RVQ)](#10-residual-quantizer-rq--rvq)
-
-**Part IV — Training, Memory & Lifecycle**
-
-11. [Training Procedure](#11-training-procedure)
-12. [Clustering with FAISS](#12-clustering-with-faiss)
-13. [Memory Formulas & Comparison](#13-memory-formulas--comparison)
-14. [Index Lifecycle](#14-index-lifecycle)
-
-**Part V — Search Flow & Tuning**
-
-15. [Full Search Flow Pipeline](#15-full-search-flow-pipeline)
-16. [Search Parameters & Per-Query Tuning](#16-search-parameters--per-query-tuning)
-17. [Performance Tuning](#17-performance-tuning)
-18. [Auto-Tuning](#18-auto-tuning)
-
-**Part VI — Advanced Operations**
-
-19. [ID Management: Custom IDs, Removal, Reconstruction](#19-id-management-custom-ids-removal-reconstruction)
-20. [IndexRefine: Two-Stage (Coarse + Refinement)](#20-indexrefine-two-stage-coarse--refinement)
-21. [IndexPreTransform & Preprocessing](#21-indextransform--preprocessing)
-22. [Range Search](#22-range-search)
-23. [Merge & Batch Operations](#23-merge--batch-operations)
-
-**Part VII — Infrastructure & Scaling**
-
-24. [SIMD, Threading & Parallel Modes](#24-simd-threading--parallel-modes)
-25. [GPU Support](#25-gpu-support)
-26. [Distributed & Parallel Indexes](#26-distributed--parallel-indexes)
+- [1. Foundations & Index Design](#1-foundations--index-design)
+  - [Architecture Overview](#1-architecture-overview)
+  - [Quantization Fundamentals](#2-quantization-fundamentals)
+  - [Distance Metrics Reference](#3-distance-metrics-reference)
+  - [Product Quantization (PQ)](#4-product-quantization-pq)
+  - [Inverted File Index (IVF)](#5-inverted-file-index-ivf)
+  - [IVFPQ: IVF + PQ](#6-ivfpq-ivf--pq)
+  - [HNSW: Hierarchical Navigable Small World](#7-hnsw-hierarchical-navigable-small-world)
+  - [Binary Indexes](#8-binary-indexes)
+  - [Quantizer Types in FAISS](#9-quantizer-types-in-faiss)
+  - [Residual Quantizer (RQ / RVQ)](#10-residual-quantizer-rq--rvq)
+  - [Training Procedure](#11-training-procedure)
+  - [Clustering with FAISS](#12-clustering-with-faiss)
+  - [Memory Formulas & Comparison](#13-memory-formulas--comparison)
+  - [Index Lifecycle](#14-index-lifecycle)
+- [2. Search Tuning & Production](#2-search-tuning--production)
+  - [Full Search Flow Pipeline](#15-full-search-flow-pipeline)
+  - [Search Parameters & Per-Query Tuning](#16-search-parameters--per-query-tuning)
+  - [Performance Tuning](#17-performance-tuning)
+  - [Auto-Tuning](#18-auto-tuning)
+  - [ID Management: Custom IDs, Removal, Reconstruction](#19-id-management-custom-ids-removal-reconstruction)
+  - [IndexRefine: Two-Stage (Coarse + Refinement)](#20-indexrefine-two-stage-coarse--refinement)
+  - [IndexPreTransform & Preprocessing](#21-indextransform--preprocessing)
+  - [Range Search](#22-range-search)
+  - [Merge & Batch Operations](#23-merge--batch-operations)
+  - [SIMD, Threading & Parallel Modes](#24-simd-threading--parallel-modes)
+  - [GPU Support](#25-gpu-support)
+  - [Distributed & Parallel Indexes](#26-distributed--parallel-indexes)
+- [Quick Reference Card](#quick-reference-card)
 
 ---
 
-## Part I — Foundations
+## 1. Foundations & Index Design
 
----
-
-## 1. Architecture Overview
+### 1. Architecture Overview
 
 FAISS is structured as a **layered quantization system**. At its core is a simple idea: trade precision for memory and speed by compressing vectors.
 
@@ -111,9 +92,9 @@ graph LR
 
 ---
 
-## 2. Quantization Fundamentals
+### 2. Quantization Fundamentals
 
-### What is Quantization?
+#### What is Quantization?
 
 Mapping a continuous (or large discrete) set of values to a smaller finite set.
 
@@ -126,7 +107,7 @@ Original:  [0.342, -0.157, 0.891, -0.623, ...]   ← float32 (4 bytes each)
 Quantized: [  0x4A,   0x2B,   0xF1,   0x87, ...]  ← uint8  (1 byte each)
 ```
 
-### Scalar vs Product Quantization
+#### Scalar vs Product Quantization
 
 | Feature | Scalar Quantization (SQ) | Product Quantization (PQ) |
 |---------|-------------------------|---------------------------|
@@ -136,7 +117,7 @@ Quantized: [  0x4A,   0x2B,   0xF1,   0x87, ...]  ← uint8  (1 byte each)
 | Codebook size | 2 × d (min/max per dim) | M × k<sub>sub</sub> × (d/M) |
 | FAISS class | `IndexScalarQuantizer` | `IndexPQ` / `IndexIVFPQ` |
 
-### Why Quantize?
+#### Why Quantize?
 
 ```mermaid
 graph LR
@@ -155,9 +136,9 @@ graph LR
 
 ---
 
-## 3. Distance Metrics Reference
+### 3. Distance Metrics Reference
 
-### 3.1 Supported Metrics
+#### 3.1 Supported Metrics
 
 ```python
 METRIC_INNER_PRODUCT = faiss.METRIC_INNER_PRODUCT  # 0
@@ -171,7 +152,7 @@ METRIC_JensenShannon = faiss.METRIC_JensenShannon  # 30
 METRIC_Cosine        = faiss.METRIC_Cosine         # via preprocessing
 ```
 
-### 3.2 Metric Details
+#### 3.2 Metric Details
 
 | Metric | Formula | Range | FAISS Behavior |
 |--------|---------|-------|----------------|
@@ -183,7 +164,7 @@ METRIC_Cosine        = faiss.METRIC_Cosine         # via preprocessing
 | Canberra | `Σ\|xᵢ - yᵢ\| / (\|xᵢ\| + \|yᵢ\|)` | [0, ∞) | Sensitive near 0 |
 | Jensen-Shannon | `½ KL(P‖M) + ½ KL(Q‖M)` | [0, log2] | For probability vectors |
 
-### 3.3 Important: L2 Returns Squared Distance
+#### 3.3 Important: L2 Returns Squared Distance
 
 ```python
 index = faiss.IndexFlatL2(d)
@@ -197,7 +178,7 @@ print(D)     # e.g. [[12.34, 15.67, 18.90]]
 print(np.sqrt(D))  # e.g. [[3.51, 3.96, 4.35]]
 ```
 
-### 3.4 How to Use Different Metrics
+#### 3.4 How to Use Different Metrics
 
 ```python
 # L2 (default) — factory style
@@ -219,7 +200,7 @@ index_lp = faiss.index_factory(d, "IVF4096,PQ16", faiss.METRIC_Lp)
 index_lp.metric_arg = 3.0
 ```
 
-### 3.5 Metric Compatibility with Indexes
+#### 3.5 Metric Compatibility with Indexes
 
 | Index | L2 | IP | L1 | Lp | Cosine* |
 |-------|----|----|----|----|---------|
@@ -233,13 +214,11 @@ index_lp.metric_arg = 3.0
 
 ---
 
-## Part II — Index Building Blocks
-
 ---
 
-## 4. Product Quantization (PQ)
+### 4. Product Quantization (PQ)
 
-### 4.1 The Core Idea
+#### 4.1 The Core Idea
 
 Split high-dimensional space into **M independent subspaces**, quantize each separately.
 
@@ -257,7 +236,7 @@ flowchart TD
     G --> H["PQ Code = M bytes<br/>e.g. 16 bytes for entire 128-dim vector"]
 ```
 
-### 4.2 Visual Example (M=4, D=8, k<sub>sub</sub>=4)
+#### 4.2 Visual Example (M=4, D=8, k<sub>sub</sub>=4)
 
 ```
 Original vector (8 floats):
@@ -285,7 +264,7 @@ Subspace 3: [-0.63, 0.27] → nearest = c1 (index 1)
 PQ Code: [0, 0, 0, 1]   ← 4 bytes (with k=256, still 4 bytes but range 0-255 each)
 ```
 
-### 4.3 PQ Parameters
+#### 4.3 PQ Parameters
 
 | Parameter | Symbol | Typical Value | Description |
 |-----------|--------|---------------|-------------|
@@ -295,7 +274,7 @@ PQ Code: [0, 0, 0, 1]   ← 4 bytes (with k=256, still 4 bytes but range 0-255 e
 | Total bits per vector | M × log₂(k<sub>sub</sub>) | M × 8 | Storage per vector |
 | Codebooks memory | M × k<sub>sub</sub> × (d/M) × 4 | trivial | Centroids storage |
 
-### 4.4 PQ Code Size vs Dimensionality
+#### 4.4 PQ Code Size vs Dimensionality
 
 | D | M=8 | M=16 | M=32 | M=64 |
 |---|-----|------|------|------|
@@ -307,7 +286,7 @@ PQ Code: [0, 0, 0, 1]   ← 4 bytes (with k=256, still 4 bytes but range 0-255 e
 > Values are **code size in bytes** and **(compression ratio vs float32)**.
 > Higher M = more accurate but less compression.
 
-### 4.5 ADC: Asymmetric Distance Computation
+#### 4.5 ADC: Asymmetric Distance Computation
 
 Instead of decoding vectors, FAISS precomputes **distance tables** — this is the key performance optimization.
 
@@ -331,7 +310,7 @@ flowchart LR
     LM --> SUM
 ```
 
-#### Symmetric vs Asymmetric
+###### Symmetric vs Asymmetric
 
 | Aspect | Symmetric (SDC) | Asymmetric (ADC) |
 |--------|-----------------|-------------------|
@@ -354,7 +333,7 @@ ADC error:  ||q - db||² ≈ ||q - PQ(db)||²
 ADC has strictly less error than SDC.
 ```
 
-#### ADC Lookup Table Construction
+##### ADC Lookup Table Construction
 
 ```python
 def build_distance_table(query, pq_centroids, M, dsub, ksub):
@@ -373,7 +352,7 @@ def adc_score(pq_code, tables, M):
     return dist
 ```
 
-#### Precomputed Table Optimization
+##### Precomputed Table Optimization
 
 FAISS merges distance table computations across `nprobe` centroids that share the same coarse centroid:
 
@@ -394,9 +373,9 @@ flowchart LR
 
 ---
 
-## 5. Inverted File Index (IVF)
+### 5. Inverted File Index (IVF)
 
-### 5.1 Concept
+#### 5.1 Concept
 
 Partition the space into **Voronoi cells** using a coarse quantizer (k-means). At search time, only probe cells near the query.
 
@@ -418,7 +397,7 @@ flowchart TD
     end
 ```
 
-### 5.2 IVF Parameters
+#### 5.2 IVF Parameters
 
 | Parameter | Symbol | Typical Range | Description |
 |-----------|--------|---------------|-------------|
@@ -426,7 +405,7 @@ flowchart TD
 | Cells to probe | nprobe | 1 - 256 | Trade-off: speed vs recall |
 | Avg list size | n / nlist | 10 - 1000 | Vectors per cell |
 
-### 5.3 IVF Speedup
+#### 5.3 IVF Speedup
 
 ```
 Without IVF: O(n × D)     — scan everything
@@ -436,7 +415,7 @@ Example: n=1M, nlist=4096, nprobe=16
   Speedup = n / (nprobe × n/nlist) = 1M / (16 × 244) ≈ 256×
 ```
 
-### 5.4 Visual: Voronoi Partitioning
+#### 5.4 Visual: Voronoi Partitioning
 
 ```
                     ◆ Centroids (nlist=7)
@@ -460,9 +439,9 @@ Query ★ ──→ find nearest ◆ (nprobe=1 or more)
 
 ---
 
-## 6. IVFPQ: IVF + PQ
+### 6. IVFPQ: IVF + PQ
 
-### 6.1 Architecture
+#### 6.1 Architecture
 
 IVFPQ combines both techniques — **IVF for coarse partitioning** and **PQ for fine-grained compression**.
 
@@ -490,7 +469,7 @@ graph TB
     end
 ```
 
-### 6.2 Why Use Residuals?
+#### 6.2 Why Use Residuals?
 
 ```
 Without residual (PQ on raw vectors):
@@ -505,7 +484,7 @@ With residual (PQ on residual = x - coarse_centroid):
   → Lower quantization error
 ```
 
-### 6.3 FAISS Index Factory Strings
+#### 6.3 FAISS Index Factory Strings
 
 | String | Index | Description |
 |--------|-------|-------------|
@@ -517,7 +496,7 @@ With residual (PQ on residual = x - coarse_centroid):
 | `"IVF4096,SQ8"` | `IndexIVFScalarQuantizer` | IVF + scalar quantization |
 | `"OPQ16,IVF4096,PQ16"` | `IndexIVFPQ` | OPQ rotation + IVFPQ |
 
-### 6.4 by_residual Flag
+#### 6.4 by_residual Flag
 
 IVFPQ has a `by_residual` flag (default `True`) that controls whether PQ codes encode the **residual** or the **full vector**:
 
@@ -533,9 +512,9 @@ index.by_residual = False  # PQ encodes the full vector directly
 
 ---
 
-## 7. HNSW: Hierarchical Navigable Small World
+### 7. HNSW: Hierarchical Navigable Small World
 
-### 7.1 Concept
+#### 7.1 Concept
 
 A multi-layer graph where upper layers are "express lanes" (few nodes, long jumps) and lower layers provide fine-grained neighbors.
 
@@ -558,7 +537,7 @@ flowchart TB
     Layer1 --> Layer0
 ```
 
-### 7.2 Search Flow
+#### 7.2 Search Flow
 
 ```
 1. Start at entry point (top layer)
@@ -581,7 +560,7 @@ flowchart TD
     EXPAND --> RESULT["Return top-k"]
 ```
 
-### 7.3 HNSW Variants in FAISS
+#### 7.3 HNSW Variants in FAISS
 
 | Index | Factory String | Description |
 |-------|---------------|-------------|
@@ -589,7 +568,7 @@ flowchart TD
 | `IndexHNSWPQ` | `"HNSW32,PQ16"` | HNSW graph + PQ compressed vectors |
 | `IndexHNSWSQ` | `"HNSW32,SQ8"` | HNSW graph + scalar quantized vectors |
 
-### 7.4 Parameters
+#### 7.4 Parameters
 
 | Parameter | Description | Typical Range | Effect |
 |-----------|-------------|---------------|--------|
@@ -614,7 +593,7 @@ index.hnsw.efSearch = 64         # before search
 D, I = index.search(xq, k=10)
 ```
 
-### 7.5 HNSW Memory
+#### 7.5 HNSW Memory
 
 | Component | Formula | Example (1M, 128D, M=32) |
 |-----------|---------|--------------------------|
@@ -629,7 +608,7 @@ D, I = index.search(xq, k=10)
 | HNSWPQ (M=16) | `n × (16 + 8M)` | ~6× less |
 | HNSWSQ8 | `n × (128 + 8M)` | ~3.5× less |
 
-### 7.6 When to Use HNSW vs IVF
+#### 7.6 When to Use HNSW vs IVF
 
 | Scenario | HNSW | IVF |
 |----------|------|-----|
@@ -643,9 +622,9 @@ D, I = index.search(xq, k=10)
 
 ---
 
-## 8. Binary Indexes
+### 8. Binary Indexes
 
-### 8.1 Concept
+#### 8.1 Concept
 
 Encode vectors as **binary codes** and search using **Hamming distance**.
 
@@ -660,7 +639,7 @@ Quantized: each dim → 1 bit
 Storage:    D bits per vector  (e.g. 128D → 16 bytes)
 ```
 
-### 8.2 Binary Index Types
+#### 8.2 Binary Index Types
 
 | Index | Description | Memory (128D, 1M) |
 |-------|-------------|-------------------|
@@ -668,7 +647,7 @@ Storage:    D bits per vector  (e.g. 128D → 16 bytes)
 | `IndexBinaryIVF` | IVF + binary codes | ~20 MB |
 | `IndexBinaryHash` | Multi-index hashing | Variable |
 
-### 8.3 Usage
+#### 8.3 Usage
 
 ```python
 import faiss
@@ -691,7 +670,7 @@ index_ivf.nprobe = 4
 D, I = index_ivf.search(xq_bin, k=10)
 ```
 
-### 8.4 Binary Code Size
+#### 8.4 Binary Code Size
 
 | Dimension | Bytes | Compression vs float32 |
 |-----------|-------|----------------------|
@@ -700,7 +679,7 @@ D, I = index_ivf.search(xq_bin, k=10)
 | 256 | 32 | 32× |
 | 512 | 64 | 32× |
 
-### 8.5 When to Use Binary Indexes
+#### 8.5 When to Use Binary Indexes
 
 | Pro | Con |
 |-----|-----|
@@ -711,13 +690,11 @@ D, I = index_ivf.search(xq_bin, k=10)
 
 ---
 
-## Part III — Quantizers In Depth
-
 ---
 
-## 9. Quantizer Types in FAISS
+### 9. Quantizer Types in FAISS
 
-### 9.1 Taxonomy
+#### 9.1 Taxonomy
 
 ```mermaid
 mindmap
@@ -757,7 +734,7 @@ mindmap
         IVF + Residual Quantizer
 ```
 
-### 9.2 Quantizer Comparison (128D)
+#### 9.2 Quantizer Comparison (128D)
 
 | Quantizer | Code size | Search type | Accuracy | Speed | Use case |
 |-----------|----------|-------------|----------|-------|----------|
@@ -770,7 +747,7 @@ mindmap
 | **RQ** (RVQ) | 8-32 B | Asymmetric | Excellent | Slow | Best accuracy for compression |
 | **OPQ+PQ** | 8-32 B | Asymmetric | Best | Medium | Rotated optimal PQ |
 
-### 9.3 Scalar Quantizer Detail
+#### 9.3 Scalar Quantizer Detail
 
 ```
 Scalar Quantization (QT_8bit):
@@ -786,7 +763,7 @@ Scalar Quantization (QT_8bit):
   Codebook: just 2 × D floats (min, max per dim)
 ```
 
-### 9.4 OPQ: Optimized Product Quantization
+#### 9.4 OPQ: Optimized Product Quantization
 
 OPQ learns a **rotation matrix** R to align dimensions with PQ subspaces, minimizing quantization error.
 
@@ -813,7 +790,7 @@ index = faiss.IndexPreTransform(opq, faiss.IndexIVFPQ(..., d, nlist, M, 8))
 index.train(xb)
 ```
 
-### 9.5 Polysemous Quantizer
+#### 9.5 Polysemous Quantizer
 
 Makes PQ codes compatible with Hamming distance for fast filtering:
 
@@ -831,9 +808,9 @@ hamming_distances = pq.compute_sdc_table()
 
 ---
 
-## 10. Residual Quantizer (RQ / RVQ)
+### 10. Residual Quantizer (RQ / RVQ)
 
-### 10.1 Concept
+#### 10.1 Concept
 
 **Residual Vector Quantization (RVQ)** uses **multiple codebooks** stacked in levels. Each level quantizes the residual from the previous level.
 
@@ -850,7 +827,7 @@ flowchart TD
     FINAL["x_approx = c₁ + c₂ + ... + c<sub>N</sub>"]
 ```
 
-### 10.2 PQ vs RQ
+#### 10.2 PQ vs RQ
 
 | Aspect | PQ | RQ (RVQ) |
 |--------|----|-----------|
@@ -862,7 +839,7 @@ flowchart TD
 | Encoding speed | Fast (O(M × ksub)) | Slower (requires search) |
 | FAISS class | `ProductQuantizer` | `ResidualQuantizer` |
 
-### 10.3 Encoding Complexity
+#### 10.3 Encoding Complexity
 
 ```
 PQ encoding:  O(M × ksub × d/M) = O(ksub × d)
@@ -872,7 +849,7 @@ RQ encoding:  O(N × ksub × d) with greedy
 At N=M, RQ is ~N× slower than PQ to encode.
 ```
 
-### 10.4 FAISS Usage
+#### 10.4 FAISS Usage
 
 ```python
 import faiss
@@ -902,7 +879,7 @@ index_ivf_rq.nprobe = 16
 D, I = index_ivf_rq.search(xq, k=10)
 ```
 
-### 10.5 RQ Accuracy vs PQ
+#### 10.5 RQ Accuracy vs PQ
 
 ```
 Dataset: SIFT128, 1M training, 4 bytes/vector
@@ -923,13 +900,11 @@ Cost: 2-5× slower encoding.
 
 ---
 
-## Part IV — Training, Memory & Lifecycle
-
 ---
 
-## 11. Training Procedure
+### 11. Training Procedure
 
-### 11.1 What Gets Trained
+#### 11.1 What Gets Trained
 
 ```mermaid
 flowchart TD
@@ -958,7 +933,7 @@ flowchart TD
     CQT --> CC
 ```
 
-### 11.2 Training Requirements
+#### 11.2 Training Requirements
 
 | Parameter | Requirement | Why |
 |-----------|-------------|-----|
@@ -968,7 +943,7 @@ flowchart TD
 | For 128D, M=16, k<sub>sub</sub>=256 | ≥ 65,536 | Minimum training set |
 | Recommended | 100K - 1M | Better codebooks with more data |
 
-### 11.3 Training Pseudocode
+#### 11.3 Training Pseudocode
 
 ```python
 def train_ivfpq(training_vectors, nlist, M, ksub=256):
@@ -999,7 +974,7 @@ def train_ivfpq(training_vectors, nlist, M, ksub=256):
     return coarse_centroids, pq_centroids
 ```
 
-### 11.4 FAISS Training in Practice
+#### 11.4 FAISS Training in Practice
 
 ```python
 # FAISS handles all of this internally:
@@ -1015,9 +990,9 @@ index.train(xb)
 
 ---
 
-## 12. Clustering with FAISS
+### 12. Clustering with FAISS
 
-### 12.1 FAISS Kmeans
+#### 12.1 FAISS Kmeans
 
 FAISS's k-means is heavily optimized and can handle **billions** of points.
 
@@ -1037,7 +1012,7 @@ iteration_stats = kmeans.iteration_stats    # per-iteration metrics
 _, assignments = kmeans.index.search(xb, 1)
 ```
 
-### 12.2 Kmeans Parameters
+#### 12.2 Kmeans Parameters
 
 ```python
 km = faiss.Kmeans(d, k, 
@@ -1053,7 +1028,7 @@ km = faiss.Kmeans(d, k,
 )
 ```
 
-### 12.3 ClusteringParameters — Low-Level Control
+#### 12.3 ClusteringParameters — Low-Level Control
 
 ```python
 cp = faiss.ClusteringParameters()
@@ -1070,7 +1045,7 @@ clustering = faiss.Clustering(d, k, cp)
 clustering.train(xb, faiss.IndexFlatL2(d))
 ```
 
-### 12.4 ProgressiveDimClustering
+#### 12.4 ProgressiveDimClustering
 
 Clusters in progressively higher dimensions — useful for very high-D data:
 
@@ -1080,7 +1055,7 @@ pdc.train(xb)
 centroids = pdc.get_centroids()
 ```
 
-### 12.5 GPU-Accelerated Clustering
+#### 12.5 GPU-Accelerated Clustering
 
 ```python
 # GPU k-means is significantly faster for large k
@@ -1088,7 +1063,7 @@ km_gpu = faiss.Kmeans(d, k=10000, niter=20, gpu=True)
 km_gpu.train(xb)
 ```
 
-### 12.6 Spherical k-means
+#### 12.6 Spherical k-means
 
 For cosine similarity / inner product:
 
@@ -1101,9 +1076,9 @@ km.train(xb)
 
 ---
 
-## 13. Memory Formulas & Comparison
+### 13. Memory Formulas & Comparison
 
-### 13.1 Exact Formulas
+#### 13.1 Exact Formulas
 
 | Component | Formula (bytes) | Notes |
 |-----------|-----------------|-------|
@@ -1120,7 +1095,7 @@ km.train(xb)
 | DirectMap | `n × 8` | cell_id + offset |
 | IndexIDMap | `n × 8` | id → seq mapping |
 
-### 13.2 Worked Example: 1M vectors, 128D
+#### 13.2 Worked Example: 1M vectors, 128D
 
 ```
 Flat (float32):
@@ -1148,7 +1123,7 @@ HNSW32,PQ16:
   Total: ≈ 272 MB     ← ~3× less than Flat
 ```
 
-### 13.3 Memory Comparison Table (128D vectors)
+#### 13.3 Memory Comparison Table (128D vectors)
 
 | Vectors | Index Type | Memory | vs Flat |
 |---------|-----------|--------|---------|
@@ -1168,7 +1143,7 @@ HNSW32,PQ16:
 | **1B** | **Flat** | **476 GB** | **impossible** |
 | 1B | IVFPQ262144,PQ16 | 23.4 GB | 20× (feasible) |
 
-### 13.4 Visual: Memory Scaling
+#### 13.4 Visual: Memory Scaling
 
 ```
 Memory usage (log scale) for 128D vectors:
@@ -1195,9 +1170,9 @@ Memory usage (log scale) for 128D vectors:
 
 ---
 
-## 14. Index Lifecycle
+### 14. Index Lifecycle
 
-### 14.1 State Diagram
+#### 14.1 State Diagram
 
 ```mermaid
 stateDiagram-v2
@@ -1218,7 +1193,7 @@ stateDiagram-v2
     Loaded --> Searched
 ```
 
-### 14.2 Important Checks
+#### 14.2 Important Checks
 
 ```python
 index = faiss.IndexIVFPQ(quantizer, d, nlist, m, ksub)
@@ -1230,7 +1205,7 @@ print(index.ntotal)        # 0 before add(), grows after
 # index.search(xq, k)      # RuntimeError if no vectors added
 ```
 
-### 14.3 Serialization
+#### 14.3 Serialization
 
 ```python
 # Write to disk
@@ -1249,13 +1224,13 @@ loaded.nprobe = 16  # restore search parameter
 
 ---
 
-## Part V — Search Flow & Tuning
-
 ---
 
-## 15. Full Search Flow Pipeline
+## 2. Search Tuning & Production
 
-### 15.1 Detailed Step-by-Step
+### 15. Full Search Flow Pipeline
+
+#### 15.1 Detailed Step-by-Step
 
 ```mermaid
 sequenceDiagram
@@ -1286,7 +1261,7 @@ sequenceDiagram
     H-->>Q: return top-k (id, distance)
 ```
 
-### 15.2 Pseudocode
+#### 15.2 Pseudocode
 
 ```python
 def search(index, query, k, nprobe):
@@ -1316,7 +1291,7 @@ def search(index, query, k, nprobe):
     return heap.top(k)
 ```
 
-### 15.3 Actual FAISS Code Path
+#### 15.3 Actual FAISS Code Path
 
 ```python
 import faiss
@@ -1356,7 +1331,7 @@ recall = np.mean([
 print(f"Recall@10: {recall:.4f}")
 ```
 
-### 15.4 What Happens Inside `index.search()`
+#### 15.4 What Happens Inside `index.search()`
 
 ```mermaid
 flowchart TD
@@ -1375,9 +1350,9 @@ flowchart TD
 
 ---
 
-## 16. Search Parameters & Per-Query Tuning
+### 16. Search Parameters & Per-Query Tuning
 
-### 16.1 Default Parameters
+#### 16.1 Default Parameters
 
 Most search parameters are set as **member variables**:
 
@@ -1386,7 +1361,7 @@ index.nprobe = 16         # IVF: cells to probe
 index.hnsw.efSearch = 64  # HNSW: search beam width
 ```
 
-### 16.2 SearchParameters — Per-Query Overrides
+#### 16.2 SearchParameters — Per-Query Overrides
 
 ```python
 params = faiss.SearchParametersIVF()
@@ -1399,7 +1374,7 @@ D1, I1 = index.search(xq[:10], k=10, params=params)
 D2, I2 = index.search(xq[10:20], k=10)
 ```
 
-### 16.3 max_codes — Safety Limit
+#### 16.3 max_codes — Safety Limit
 
 ```python
 params.max_codes = 0       # 0 = no limit
@@ -1417,7 +1392,7 @@ With max_codes=50000:
   Stops early → bounded latency, possible accuracy loss
 ```
 
-### 16.4 IVFPQ Search Parameters
+#### 16.4 IVFPQ Search Parameters
 
 ```python
 class SearchParametersIVF:
@@ -1428,7 +1403,7 @@ class SearchParametersIVF:
     sel: IDSelector        # filter which IDs to consider
 ```
 
-### 16.5 IDSelector in Search
+#### 16.5 IDSelector in Search
 
 Filter results to specific ID sets during search:
 
@@ -1442,7 +1417,7 @@ D, I = index.search(xq, k=10, params=params)
 # Results only from IDs 1000-1999
 ```
 
-### 16.6 parallel_mode
+#### 16.6 parallel_mode
 
 ```python
 index.parallel_mode = 0   # Sequential over nprobe centroids
@@ -1454,9 +1429,9 @@ index.parallel_mode = 4   # Parallelize across inverted list chunks
 
 ---
 
-## 17. Performance Tuning
+### 17. Performance Tuning
 
-### 17.1 Parameter Trade-offs
+#### 17.1 Parameter Trade-offs
 
 ```mermaid
 graph TB
@@ -1477,7 +1452,7 @@ graph TB
     end
 ```
 
-### 17.2 Recommended Starting Points
+#### 17.2 Recommended Starting Points
 
 | Dataset size | Dimension | Recommended Index | nlist | nprobe | M | Memory (est.) |
 |-------------|-----------|-------------------|-------|--------|---|--------------|
@@ -1488,7 +1463,7 @@ graph TB
 | 100M-1B | 128-768 | IVFPQ + OPQ | 65536-262144 | 128-256 | 32-64 | 5-50 GB |
 | 1B+ | 128-768 | IVF + PQ + GPU | 262144+ | 256+ | 64 | 50+ GB |
 
-### 17.3 Effect of nprobe on Recall & QPS
+#### 17.3 Effect of nprobe on Recall & QPS
 
 ```
 Dataset: 1M SIFT128 (128D), IVFPQ4096_PQ16, k=10
@@ -1505,7 +1480,7 @@ Diminishing returns beyond nprobe=32-64.
 Use nprobe=16 for production (10× faster, 89% recall).
 ```
 
-### 17.4 Common Pitfalls
+#### 17.4 Common Pitfalls
 
 1. **Training set too small** → poor PQ codebooks, low recall
 2. **M too low** → poor PQ accuracy (fewer subspaces)
@@ -1517,7 +1492,7 @@ Use nprobe=16 for production (10× faster, 89% recall).
 8. **nprobe too low** → misses relevant Voronoi cells
 9. **Forgetting `make_direct_map()`** → can't reconstruct or remove efficiently
 
-### 17.5 Optimization Checklist
+#### 17.5 Optimization Checklist
 
 ```mermaid
 flowchart TD
@@ -1540,9 +1515,9 @@ flowchart TD
 
 ---
 
-## 18. Auto-Tuning
+### 18. Auto-Tuning
 
-### 18.1 Concept
+#### 18.1 Concept
 
 FAISS can automatically search for the optimal index parameters for a given dataset, query set, and performance target.
 
@@ -1555,7 +1530,7 @@ flowchart TD
     OP --> RECOMMEND["Recommended index config"]
 ```
 
-### 18.2 Usage
+#### 18.2 Usage
 
 ```python
 import faiss
@@ -1590,7 +1565,7 @@ for op in ops:
           f"recall={op.recall:.4f}, time={op.time_ms:.2f}ms")
 ```
 
-### 18.3 Operating Points
+#### 18.3 Operating Points
 
 ```python
 ops = ps.operating_points
@@ -1608,7 +1583,7 @@ for op in ops:
 ps.display()
 ```
 
-### 18.4 Search Criterion
+#### 18.4 Search Criterion
 
 ```python
 # Under time budget
@@ -1623,7 +1598,7 @@ for op in reversed(ops):
         break
 ```
 
-### 18.5 Criteria Parameters
+#### 18.5 Criteria Parameters
 
 ```python
 criteria = faiss.AutoTuneCriterion(nq, k)
@@ -1638,13 +1613,11 @@ ps.explore(index, xb, xq, gt_I)
 
 ---
 
-## Part VI — Advanced Operations
-
 ---
 
-## 19. ID Management: Custom IDs, Removal, Reconstruction
+### 19. ID Management: Custom IDs, Removal, Reconstruction
 
-### 19.1 Default vs Custom IDs
+#### 19.1 Default vs Custom IDs
 
 | Index type | Default ID | Custom ID support |
 |------------|-----------|-------------------|
@@ -1652,7 +1625,7 @@ ps.explore(index, xb, xq, gt_I)
 | `IndexIVFPQ` | Sequential | Via `IndexIVFPQ` wrapped in `IndexIDMap2` |
 | `IndexHNSWFlat` | Sequential | Via `IndexIDMap` |
 
-### 19.2 IndexIDMap & IndexIDMap2
+#### 19.2 IndexIDMap & IndexIDMap2
 
 ```mermaid
 flowchart LR
@@ -1684,7 +1657,7 @@ reconstructed = id_map.reconstruct(10005)
 id_map.remove_ids(np.array([10005]))
 ```
 
-### 19.3 IDSelector — Fine-Grained Removal
+#### 19.3 IDSelector — Fine-Grained Removal
 
 FAISS provides built-in selector types — no subclassing needed:
 
@@ -1702,7 +1675,7 @@ sel3 = faiss.IDSelectorNot(faiss.IDSelectorRange(0, 1000))
 index.remove_ids(sel3)  # removes everything EXCEPT IDs 0-999
 ```
 
-### 19.4 Reconstruction via DirectMap
+#### 19.4 Reconstruction via DirectMap
 
 `IndexIVFPQ` does **not** support `reconstruct()` by default — it only stores PQ codes.
 
@@ -1735,9 +1708,9 @@ flowchart LR
 
 ---
 
-## 20. IndexRefine: Two-Stage (Coarse + Refinement)
+### 20. IndexRefine: Two-Stage (Coarse + Refinement)
 
-### 20.1 Concept
+#### 20.1 Concept
 
 ```mermaid
 flowchart LR
@@ -1747,7 +1720,7 @@ flowchart LR
     STAGE2 --> RESULTS["Final top-k (exact distances)"]
 ```
 
-### 20.2 Usage
+#### 20.2 Usage
 
 ```python
 coarse_index = faiss.index_factory(d, "IVF4096,PQ16")
@@ -1766,14 +1739,14 @@ D, I = index.search(xq, k=10)
 # "IVF4096,PQ16,Refine(Flat)"
 ```
 
-### 20.3 IndexRefine Parameters
+#### 20.3 IndexRefine Parameters
 
 | Parameter | Description | Effect |
 |-----------|-------------|--------|
 | `k_factor` | Multiplier for candidates to refine | Higher = better recall, slower |
 | `own_fields` | Whether IndexRefine owns the sub-indexes | Memory management |
 
-### 20.4 Memory Cost
+#### 20.4 Memory Cost
 
 ```
 IndexRefine stores raw vectors in the refinement index:
@@ -1790,9 +1763,9 @@ Useful when you need exact distances but can't scan everything.
 
 ---
 
-## 21. IndexPreTransform & Preprocessing
+### 21. IndexPreTransform & Preprocessing
 
-### 21.1 Concept
+#### 21.1 Concept
 
 Apply a **transformation** to vectors before passing them to an index.
 
@@ -1803,7 +1776,7 @@ flowchart LR
     INDEX --> R["Results"]
 ```
 
-### 21.2 Available Transforms
+#### 21.2 Available Transforms
 
 | Transform | Class | Purpose |
 |-----------|-------|---------|
@@ -1814,7 +1787,7 @@ flowchart LR
 | **Random Rotation** | `RandomRotationMatrix` | Random orthogonal rotation |
 | **Dim remapping** | `RemapDimensionsTransform` | Pad/truncate dims |
 
-### 21.3 Factory Strings with Transforms
+#### 21.3 Factory Strings with Transforms
 
 | Factory String | What it does |
 |----------------|-------------|
@@ -1824,7 +1797,7 @@ flowchart LR
 | `"L2norm,IVF4096,PQ16"` | L2 normalize → IVF → PQ |
 | `"ITQ,IVF4096,PQ16"` | ITQ rotation → IVF → PQ |
 
-### 21.4 Manual Construction
+#### 21.4 Manual Construction
 
 ```python
 # PCA + L2 normalization + IVF
@@ -1843,7 +1816,7 @@ index.add(xb)
 D, I = index.search(xq, k=10)
 ```
 
-### 21.5 When Preprocessing Helps
+#### 21.5 When Preprocessing Helps
 
 | Transform | Helps When | Hurts When |
 |-----------|-----------|------------|
@@ -1855,9 +1828,9 @@ D, I = index.search(xq, k=10)
 
 ---
 
-## 22. Range Search
+### 22. Range Search
 
-### 22.1 k-NN vs Range Search
+#### 22.1 k-NN vs Range Search
 
 | Aspect | k-NN (`search()`) | Range (`range_search()`) |
 |--------|-------------------|-------------------------|
@@ -1866,7 +1839,7 @@ D, I = index.search(xq, k=10)
 | Use case | Top-k retrieval | Radius-based filtering |
 | Supported by | All indexes | Most indexes (Flat, IVF, HNSW) |
 
-### 22.2 Usage
+#### 22.2 Usage
 
 ```python
 # Flat
@@ -1895,9 +1868,9 @@ counts = np.diff(lims)  # results per query
 
 ---
 
-## 23. Merge & Batch Operations
+### 23. Merge & Batch Operations
 
-### 23.1 Merging Indexes
+#### 23.1 Merging Indexes
 
 ```python
 index1 = faiss.index_factory(d, "IVF4096,PQ16")
@@ -1912,7 +1885,7 @@ index1.merge_from(index2)       # index1 now has all 100K vectors
 index2.ntotal == 0              # index2 is now empty
 ```
 
-### 23.2 copy_sub_index_to
+#### 23.2 copy_sub_index_to
 
 ```python
 sub_index = faiss.index_factory(d, "IVF4096,PQ16")
@@ -1920,7 +1893,7 @@ sub_index.copy_sub_index_to(0, 1000, index)
 # Copies first 1000 vectors from `index` to `sub_index`
 ```
 
-### 23.3 Concatenating Indexes
+#### 23.3 Concatenating Indexes
 
 ```python
 from faiss import combine_indexes
@@ -1936,7 +1909,7 @@ index2.add(xb[30000:60000])
 combined = combine_indexes([index1, index2])
 ```
 
-### 23.4 Requirements for Merge
+#### 23.4 Requirements for Merge
 
 | Condition | Required? | Why |
 |-----------|-----------|-----|
@@ -1948,13 +1921,11 @@ combined = combine_indexes([index1, index2])
 
 ---
 
-## Part VII — Infrastructure & Scaling
-
 ---
 
-## 24. SIMD, Threading & Parallel Modes
+### 24. SIMD, Threading & Parallel Modes
 
-### 24.1 SIMD Usage
+#### 24.1 SIMD Usage
 
 FAISS automatically uses SIMD instructions when available:
 
@@ -1969,7 +1940,7 @@ FAISS automatically uses SIMD instructions when available:
 | AVX-512 | Intel Skylake X+ | Wide vector operations |
 | NEON | ARM (Apple Silicon) | Distance computations |
 
-### 24.2 SIMD Impact by Operation
+#### 24.2 SIMD Impact by Operation
 
 | Operation | SIMD Benefit |
 |-----------|-------------|
@@ -1980,7 +1951,7 @@ FAISS automatically uses SIMD instructions when available:
 | k-selection (heap) | Comparison tree |
 | Hamming distance (popcount) | `_mm_popcnt_u64` intrinsic |
 
-### 24.3 Threading with OpenMP
+#### 24.3 Threading with OpenMP
 
 ```python
 import faiss
@@ -1991,7 +1962,7 @@ n_threads = faiss.omp_get_max_threads()
 # Affects: training (parallel k-means), search (parallel queries), indexing
 ```
 
-### 24.4 Batch Processing
+#### 24.4 Batch Processing
 
 ```python
 # Query batching — vastly more efficient than single queries
@@ -2010,9 +1981,9 @@ for i in range(0, len(xq), batch_size):
 
 ---
 
-## 25. GPU Support
+### 25. GPU Support
 
-### 25.1 GPU Index Types
+#### 25.1 GPU Index Types
 
 | GPU Index | CPU Equivalent | Supported? |
 |-----------|---------------|------------|
@@ -2024,7 +1995,7 @@ for i in range(0, len(xq), batch_size):
 | `GpuIndexBinaryFlat` | `IndexBinaryFlat` | ✅ Full |
 | HNSW (any variant) | — | ❌ Not supported |
 
-### 25.2 Architecture
+#### 25.2 Architecture
 
 ```mermaid
 flowchart TD
@@ -2047,7 +2018,7 @@ flowchart TD
 
 **Key detail:** The coarse quantizer still runs on CPU. Only PQ code scanning and distance computation are GPU-accelerated.
 
-### 25.3 Standard Usage
+#### 25.3 Standard Usage
 
 ```python
 # Method 1: Create GPU index directly
@@ -2071,7 +2042,7 @@ cpu_index_again = faiss.index_gpu_to_cpu(gpu_index)
 gpu_index = faiss.index_cpu_to_all_gpus(cpu_index, ngpu=4)
 ```
 
-### 25.4 GPU Memory Management
+#### 25.4 GPU Memory Management
 
 | Component | Memory | Notes |
 |-----------|--------|-------|
@@ -2091,7 +2062,7 @@ Total GPU:    ≈ 24 MB
 Compare to Flat on GPU: 1M × 128 × 4 = 512 MB
 ```
 
-### 25.5 GpuIndexIVFPQ Specific Options
+#### 25.5 GpuIndexIVFPQ Specific Options
 
 ```python
 config = faiss.GpuIndexIVFPQConfig()
@@ -2107,7 +2078,7 @@ res.setTempMemory(512 * 1024 * 1024)  # 512 MB temp buffer
 gpu_index = faiss.GpuIndexIVFPQ(res, d, nlist, M, nbits, faiss.METRIC_L2, config)
 ```
 
-### 25.6 GPU vs CPU Performance
+#### 25.6 GPU vs CPU Performance
 
 ```
 Dataset: 1M SIFT128, IVFPQ4096,PQ16, nprobe=16, k=10
@@ -2122,9 +2093,9 @@ Speedup: 10-20×
 
 ---
 
-## 26. Distributed & Parallel Indexes
+### 26. Distributed & Parallel Indexes
 
-### 26.1 IndexShards — Distribute Data Across Indexes
+#### 26.1 IndexShards — Distribute Data Across Indexes
 
 ```mermaid
 flowchart TD
@@ -2173,7 +2144,7 @@ D, I = shard.search(xq, k=10)
 shard_ivf = faiss.IndexShardsIVF(dim, faiss.METRIC_L2, True)
 ```
 
-### 26.2 IndexReplicas — Load Balancing & Fault Tolerance
+#### 26.2 IndexReplicas — Load Balancing & Fault Tolerance
 
 ```python
 replicas = faiss.IndexReplicas()
@@ -2187,7 +2158,7 @@ replicas.add(xb)  # replicated to all
 D, I = replicas.search(xq, k=10)  # round-robins
 ```
 
-### 26.3 IndexSplitVectors — Dimension-Wise Splitting
+#### 26.3 IndexSplitVectors — Dimension-Wise Splitting
 
 ```
 Original vector (128D)
@@ -2210,7 +2181,7 @@ D, I = split_index.search(xq, k=10)
 # Only works well if dimensions are independent
 ```
 
-### 26.4 Thread Safety
+#### 26.4 Thread Safety
 
 | Operation | Thread Safe? | Notes |
 |-----------|-------------|-------|
@@ -2218,6 +2189,22 @@ D, I = split_index.search(xq, k=10)
 | `search()` on different indexes | ✅ Yes | Independent objects |
 | `add()` while searching | ❌ No | Not supported |
 | `train()` | ✅ Single-threaded | Uses OMP internally |
+
+---
+
+### Common Issues Table
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Low recall | Training set too small | Use ≥ 256 × k<sub>sub</sub> training vectors |
+| Poor PQ accuracy | M too low | Increase M (more subspaces) |
+| Codebook overfitting | M too high | Ensure D/M ≥ 2–3 |
+| Wasted memory | nlist too high | Reduce nlist to match dataset size |
+| Slow search | nlist too low | Increase nlist to reduce list sizes |
+| Suboptimal accuracy | Not using OPQ | Add OPQ rotation before PQ |
+| Poor IVFPQ accuracy | Residuals not used | Ensure `by_residual=True` |
+| Missed relevant cells | nprobe too low | Increase nprobe |
+| Can't reconstruct/remove | `make_direct_map()` not called | Call `index.make_direct_map()` |
 
 ---
 
@@ -2237,6 +2224,12 @@ D, I = split_index.search(xq, k=10)
 | DirectMap memory | `n × 8` bytes |
 | IndexIDMap memory | `n × 8` bytes |
 | IndexRefine memory | `coarse + n × d × 4` bytes |
+
+### Environment Variables
+
+```bash
+export OMP_NUM_THREADS=8          # Control OpenMP thread count for parallel search/training
+```
 
 ### Index Factory Cheat Sheet
 
@@ -2294,6 +2287,16 @@ index.remove_ids(faiss.IDSelectorRange(0, 100))
 # Merge
 index1.merge_from(index2)
 ```
+
+### Debugging Checklist
+
+- [ ] Verify `index.is_trained == True` before calling `add()`
+- [ ] Ensure training set size ≥ 256 × k<sub>sub</sub>
+- [ ] Set `index.nprobe` before search for IVF indexes
+- [ ] Call `make_direct_map()` if reconstruction or removal is needed
+- [ ] Use `IndexFlatL2` as a ground truth baseline to measure recall
+- [ ] Check metric type matches data (L2, Inner Product, or Cosine via normalized IP)
+- [ ] Validate that D / M ≥ 2–3 to avoid codebook overfitting
 
 ---
 
