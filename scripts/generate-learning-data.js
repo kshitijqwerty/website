@@ -13,7 +13,7 @@ marked.use(
       if (lang && hljs.getLanguage(lang)) {
         return hljs.highlight(code, { language: lang }).value;
       }
-      return code;
+      return hljs.highlightAuto(code).value;
     },
   })
 );

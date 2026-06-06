@@ -12,14 +12,13 @@ function estimateReadTime(html) {
   return Math.max(1, Math.ceil(words / 200));
 }
 
-function useCopyButtons(containerRef, theme) {
+function useCopyButtons(containerRef) {
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const pres = container.querySelectorAll("pre:not(.mermaid-pre)");
     const buttons = [];
-
     const headers = [];
 
     pres.forEach((pre) => {
@@ -96,19 +95,20 @@ function useCopyButtons(containerRef, theme) {
         pre.classList.remove("rounded-xl", "overflow-x-auto");
       });
     };
-  }, [containerRef, theme]);
+  }, [containerRef]);
 }
 
 export default function BlogPost() {
   const { slug } = useParams();
   const { resolved: theme } = useTheme();
   const contentRef = useRef(null);
-
-  const post = posts[slug];
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [lightboxSrc, setLightboxSrc] = useState(null);
   const { isBookmarked, toggle } = useBookmarks("blog");
 
-  useCopyButtons(contentRef, theme);
+  const post = posts[slug];
+
+  useCopyButtons(contentRef);
 
   useEffect(() => {
     const container = contentRef.current;
@@ -125,7 +125,7 @@ export default function BlogPost() {
         img.removeEventListener("click", onClick);
       });
     };
-  }, [post, lightboxSrc]);
+  }, [slug]);
 
   useEffect(() => {
     const diagrams = contentRef.current?.querySelectorAll(".mermaid");
@@ -158,7 +158,11 @@ export default function BlogPost() {
       });
       mermaid.run({ nodes: diagrams });
     });
-  }, [post, theme]);
+  }, [slug, theme]);
+
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [slug]);
 
   useEffect(() => {
     document.title = post
@@ -195,21 +199,20 @@ export default function BlogPost() {
   const readTime = estimateReadTime(post.html);
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 px-6 md:px-10 py-20">
+    <div className="min-h-screen bg-neutral-950 text-neutral-100">
       {lightboxSrc && (
         <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
       )}
-      <article className="max-w-4xl mx-auto">
-        <nav className="flex items-center gap-4 text-sm text-neutral-400 mb-12">
+
+      <div className="max-w-7xl mx-auto px-6 md:px-10 py-20">
+        <nav className="flex items-center gap-4 text-sm text-neutral-400 mb-10">
           <Link
             to="/blog"
             className="text-neutral-400 hover:text-white transition-colors"
           >
             ← All Posts
           </Link>
-
           <span aria-hidden="true">·</span>
-
           <Link
             to="/"
             className="text-neutral-400 hover:text-white transition-colors"
@@ -218,66 +221,112 @@ export default function BlogPost() {
           </Link>
         </nav>
 
-        <header>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-400 mb-4">
-            <time>{new Date(post.date + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</time>
-            <span aria-hidden="true">·</span>
-            <span>{readTime} min read</span>
-          </div>
-
-          <div className="flex items-start justify-between gap-4">
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight font-heading">
-              {post.title}
-            </h1>
-            <button
-              onClick={() => toggle(slug)}
-              className="shrink-0 mt-1.5 p-1.5 rounded-lg hover:bg-neutral-800 transition-colors"
-              aria-label={isBookmarked(slug) ? "Remove bookmark" : "Bookmark this post"}
-            >
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill={isBookmarked(slug) ? "#a78bfa" : "none"}
-                stroke={isBookmarked(slug) ? "#a78bfa" : "currentColor"}
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-              </svg>
-            </button>
-          </div>
-        </header>
-
-        <hr className="border-neutral-800 my-10" />
-
-        <div
-          ref={contentRef}
-          className="article-content text-lg"
-          dangerouslySetInnerHTML={{ __html: post.html }}
-        />
-
-        <hr className="border-neutral-800 my-12" />
-
-        <nav className="flex items-center gap-4 text-sm">
-          <Link
-            to="/blog"
-            className="text-neutral-400 hover:text-white transition-colors"
+        <button
+          onClick={() => setSidebarOpen((o) => !o)}
+          className="lg:hidden flex items-center gap-2 text-sm text-neutral-400 hover:text-white mb-8 transition-colors"
+          aria-label="Toggle table of contents"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
           >
-            ← All Posts
-          </Link>
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+          Contents
+        </button>
 
-          <span aria-hidden="true" className="text-neutral-400">·</span>
-
-          <Link
-            to="/"
-            className="text-neutral-400 hover:text-white transition-colors"
+        <div className="flex gap-12 relative">
+          {sidebarOpen && (
+            <div
+              className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+          <aside
+            className={`
+              ${sidebarOpen ? "block" : "hidden"}
+              lg:block lg:sticky lg:top-24 lg:w-64 lg:flex-shrink-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:bg-transparent
+              fixed inset-x-0 top-20 bottom-0 z-40 bg-neutral-950 overflow-y-auto
+              w-full toc-sidebar
+            `}
           >
-            Home
-          </Link>
-        </nav>
-      </article>
+            <nav aria-label="Table of contents" className="toc-nav">
+              <h2 className="toc-heading">On this page</h2>
+              <ul>
+                {post.toc.map((item) => (
+                  <li key={item.id}>
+                    <a
+                      href={`#${item.id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const el = document.getElementById(item.id);
+                        if (el) {
+                          window.scrollTo({
+                            top: el.getBoundingClientRect().top + window.scrollY - (parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 112),
+                          });
+                        }
+                        requestAnimationFrame(() => setSidebarOpen(false));
+                      }}
+                      className={`toc-link ${item.depth === 3 ? "toc-link-h3" : ""}`}
+                    >
+                      {item.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+
+          <article className="flex-1 min-w-0">
+            <header>
+              <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-400 mb-4">
+                <time>{new Date(post.date + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</time>
+                <span aria-hidden="true">·</span>
+                <span>{readTime} min read</span>
+              </div>
+
+              <div className="flex items-start justify-between gap-4">
+                <h1 className="text-4xl md:text-5xl font-bold leading-tight font-heading">
+                  {post.title}
+                </h1>
+                <button
+                  onClick={() => toggle(slug)}
+                  className="shrink-0 mt-1.5 p-1.5 rounded-lg hover:bg-neutral-800 transition-colors"
+                  aria-label={isBookmarked(slug) ? "Remove bookmark" : "Bookmark this post"}
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill={isBookmarked(slug) ? "#a78bfa" : "none"}
+                    stroke={isBookmarked(slug) ? "#a78bfa" : "currentColor"}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                  </svg>
+                </button>
+              </div>
+            </header>
+
+            <hr className="border-neutral-800 my-10" />
+
+            <div
+              ref={contentRef}
+              className="article-content text-lg"
+              dangerouslySetInnerHTML={{ __html: post.html }}
+            />
+          </article>
+        </div>
+      </div>
     </div>
   );
 }

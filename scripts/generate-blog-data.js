@@ -43,6 +43,23 @@ marked.use({
   ],
 });
 
+function unescape(text) {
+  return text
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;/g, "'")
+    .replace(/&#39;/g, "'");
+}
+
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^\w]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 marked.setOptions({
   breaks: true,
   gfm: true,
@@ -66,7 +83,7 @@ for (const file of files) {
   if (data.published === false) continue;
 
   const slug = data.slug || file.replace(/\.md$/, "");
-  const html = marked(content)
+  let html = marked(content)
     .replace(
       /<pre><code class="hljs language-(\w+)">/g,
       '<pre data-language="$1"><code class="hljs language-$1">'
@@ -75,6 +92,25 @@ for (const file of files) {
       /<pre><code>(?! )/g,
       '<pre data-language="txt"><code class="hljs">'
     );
+
+  const tocItems = [];
+  const counter = {};
+
+  html = html.replace(
+    /<h([2-3])(\s[^>]*)?>(.*?)<\/h[2-3]>/gs,
+    (match, level, attrs, content) => {
+      const plainText = unescape(content.replace(/<[^>]+>/g, ""));
+      let id = slugify(plainText);
+      if (counter[id]) {
+        counter[id]++;
+        id = `${id}-${counter[id]}`;
+      } else {
+        counter[id] = 1;
+      }
+      tocItems.push({ depth: Number(level), text: plainText, id });
+      return `<h${level} id="${id}">${content}</h${level}>`;
+    }
+  );
 
   list.push({
     slug,
@@ -90,6 +126,7 @@ for (const file of files) {
     description: data.description || "",
     tags: data.tags || [],
     html,
+    toc: tocItems,
   };
 }
 
