@@ -314,11 +314,15 @@ export default function DeepDives() {
               </p>
             </header>
 
-            <div
-              ref={contentRef}
-              className="article-content text-lg"
-              dangerouslySetInnerHTML={{ __html: post.html }}
-            />
+            {post.html ? (
+              <div
+                ref={contentRef}
+                className="article-content text-lg"
+                dangerouslySetInnerHTML={{ __html: post.html }}
+              />
+            ) : (
+              <p className="text-neutral-400">Content not available.</p>
+            )}
           </article>
         </div>
       </div>

@@ -205,6 +205,26 @@ export default function BlogPost() {
     );
   }
 
+  if (!post.html) {
+    return (
+      <div className="min-h-screen bg-neutral-950 text-neutral-100 flex items-center justify-center px-6">
+        {lightboxSrc && (
+          <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
+        )}
+        <div className="text-center">
+          <h1 className="text-4xl font-bold font-heading mb-4">{post.title}</h1>
+          <p className="text-neutral-400 mb-8">Content not available.</p>
+          <Link
+            to="/blog"
+            className="btn-primary bg-white text-black px-6 py-3 rounded-2xl font-medium hover:opacity-90 transition-opacity inline-block"
+          >
+            Browse all posts
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   const readTime = estimateReadTime(post.html);
 
   return (
