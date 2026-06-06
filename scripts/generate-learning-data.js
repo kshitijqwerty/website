@@ -71,12 +71,22 @@ for (const file of files) {
   });
 
   const counter = {};
+  function unescape(text) {
+    return text
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#x27;/g, "'")
+      .replace(/&#39;/g, "'");
+  }
+
   const tocItems = [];
 
   html = html.replace(
     /<h([2-3])(\s[^>]*)?>(.*?)<\/h[2-3]>/gs,
     (match, level, attrs, content) => {
-      const plainText = content.replace(/<[^>]+>/g, "");
+      const plainText = unescape(content.replace(/<[^>]+>/g, ""));
       let id = slugify(plainText);
       if (counter[id]) {
         counter[id]++;
