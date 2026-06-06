@@ -273,7 +273,7 @@ from torch.distributed.fsdp import (
     StateDictType,
 )
 from torch.distributed.fsdp.wrap import transformer_auto_wrap_policy
-from torch.distributed.fsdp.api import ShardedStateDictConfig
+
 import torch.nn as nn
 
 def get_fsdp_config(model):
@@ -322,7 +322,7 @@ def load_fsdp(model, path):
         StateDictType.FULL_STATE_DICT,
         state_dict_config=FullStateDictConfig(offload_to_cpu=True, rank0_only=True),
     ):
-        state_dict = torch.load(path, map_location="cpu") if dist.get_rank() == 0 else {}
+        state_dict = torch.load(path, map_location="cpu")
         model.load_state_dict(state_dict)
 ```
 
@@ -459,10 +459,10 @@ Tensor parallelism splits individual operations (like `nn.Linear`) across GPUs. 
 flowchart LR
     subgraph "Linear: Y = XW"
         X[Input] --> SPLIT[Split on dim]
-        SPLIT --> W0[W slice 0<br/>GPU 0]
-        SPLIT --> W1[W slice 1<br/>GPU 1]
-        SPLIT --> W2[W slice 2<br/>GPU 2]
-        SPLIT --> W3[W slice 3<br/>GPU 3]
+        SPLIT --> W0["W slice 0<br/>GPU 0"]
+        SPLIT --> W1["W slice 1<br/>GPU 1"]
+        SPLIT --> W2["W slice 2<br/>GPU 2"]
+        SPLIT --> W3["W slice 3<br/>GPU 3"]
         W0 --> ALLGATHER[All-Gather]
         W1 --> ALLGATHER
         W2 --> ALLGATHER
@@ -791,6 +791,7 @@ def ring_all_reduce(tensor, rank, world_size):
         dist.recv(recv_buf, recv_rank)
         dest_chunk_idx = (rank - 1 - i) % world_size
         tensor[dest_chunk_idx * chunk_size:(dest_chunk_idx + 1) * chunk_size] = recv_buf
+        send_chunk = recv_buf
 ```
 
 ### Benchmarking Collectives
@@ -818,8 +819,8 @@ def benchmark_collective(collective_fn, tensor_size_mb=128, warmup=10, iters=100
     torch.cuda.synchronize()
     elapsed_ms = start.elapsed_time(end) / iters
     
-    bus_bw = (tensor_size_mb * 2) / (elapsed_ms / 1000)  # GB/s (all-reduce: 2× data)
-    alg_bw = tensor_size_mb / (elapsed_ms / 1000)  # GB/s
+    bus_bw = (tensor_size_mb * 2 / 1000) / (elapsed_ms / 1000)  # GB/s (all-reduce: 2× data)
+    alg_bw = (tensor_size_mb / 1000) / (elapsed_ms / 1000)  # GB/s
     
     return {"latency_ms": round(elapsed_ms, 2), "bus_bw_gbs": round(bus_bw, 2)}
 
@@ -943,7 +944,7 @@ def estimate_memory(
     
     # Optimizer states (Adam: fp32 moments, 8 bytes per param)
     opt_factor = {0: 1, 1: world_size, 2: world_size, 3: world_size}[zero_stage]
-    optimizer_gb = model_params * 8 / opt_factor / 1e9
+    optimizer_gb = model_params * 12 / opt_factor / 1e9
     
     # Activations (rough estimate)
     if activation_checkpointing:
@@ -961,7 +962,7 @@ def estimate_memory(
     # Attention: KV projection (simplified)
     attention_gb = batch_size * seq_len * hidden_size * num_layers * 2 * activation_bytes / 1e9
     
-    total = weights_gb + gradients_gb + optimizer_gb + activation_gb + 2  # misc overhead
+    total = weights_gb + gradients_gb + optimizer_gb + activation_gb + attention_gb + 2  # misc overhead
     return {
         "weights_gb": round(weights_gb, 1),
         "gradients_gb": round(gradients_gb, 1),
@@ -1089,7 +1090,7 @@ def train():
     loader = DataLoader(dataset, batch_size=args.batch_size, sampler=sampler)
     
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr)
-    scaler = torch.amp.GradScaler()
+    scaler = torch.cuda.amp.GradScaler()
     
     for epoch in range(args.epochs):
         sampler.set_epoch(epoch)
@@ -1201,7 +1202,6 @@ def train_deepspeed():
         model=model,
         optimizer=optimizer,
         config_params="ds_config.json",  # ZeRO-3 config
-        model_parameters=model.parameters(),
     )
     
     dataset = MyDataset(...)
@@ -1262,7 +1262,8 @@ def check_distributed():
     world_size = dist.get_world_size() if dist.is_initialized() else 1
     local_rank = int(torch.cuda.current_device()) if torch.cuda.is_available() else -1
     
-    print(f"Rank: {rank}/{world_size}, GPU: {local_rank} ({torch.cuda.get_device_name(local_rank)})")
+    gpu_name = torch.cuda.get_device_name(local_rank) if torch.cuda.is_available() else "N/A"
+    print(f"Rank: {rank}/{world_size}, GPU: {local_rank} ({gpu_name})")
     print(f"PyTorch version: {torch.__version__}")
     print(f"CUDA available: {torch.cuda.is_available()}")
     print(f"GPU count: {torch.cuda.device_count()}")

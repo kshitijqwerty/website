@@ -74,16 +74,16 @@ def estimate_training_resources(params_billions, model_type="llm"):
         # Adam optimizer: 16 bytes per param (fp16 weights + adam states)
         params = params_billions * 1e9
         model_mem = params * 2   # fp16 weights: 2 bytes
-        optimizer_mem = params * 8  # adam: fp32 master copy + momentum + variance
+        optimizer_mem = params * 12  # adam: fp32 master copy + momentum + variance
         grad_mem = params * 2    # fp16 gradients
         activation_mem = params * 4  # ~4x for transformers (varies with seq_len)
         
-        total_gb = (model_mem + optimizer_mem + grad_mem + activation_mem) / 1e9
+        total_gb = (model_mem + optimizer_mem + grad_mem + activation_mem) / (1024**3)
         return {
             "total_gpu_memory_gb": round(total_gb, 1),
-            "model_weights_gb": round(model_mem / 1e9, 1),
-            "optimizer_states_gb": round(optimizer_mem / 1e9, 1),
-            "activation_memory_gb": round(activation_mem / 1e9, 1),
+            "model_weights_gb": round(model_mem / (1024**3), 1),
+            "optimizer_states_gb": round(optimizer_mem / (1024**3), 1),
+            "activation_memory_gb": round(activation_mem / (1024**3), 1),
             "recommended_gpus": max(1, round(total_gb / 40)),  # A100-40GB
         }
     
@@ -97,7 +97,7 @@ def estimate_training_resources(params_billions, model_type="llm"):
 def estimate_inference_memory(params_billions, precision="fp16"):
     bytes_per_param = {"fp32": 4, "fp16": 2, "int8": 1, "int4": 0.5}
     params = params_billions * 1e9
-    mem_gb = params * bytes_per_param[precision] / 1e9
+    mem_gb = params * bytes_per_param[precision] / (1024**3)
     return round(mem_gb, 1)
 
 models = {
@@ -139,22 +139,23 @@ def create_splits(ids, train_ratio=0.8, val_ratio=0.1, test_ratio=0.1, stratify=
     """Create train/val/test splits."""
     assert abs(train_ratio + val_ratio + test_ratio - 1.0) < 1e-6
     
+    indices = np.arange(len(ids))
+    
     # First split: train vs temp
-    train_ids, temp_ids = train_test_split(
-        ids, test_size=(1 - train_ratio),
+    train_idx, temp_idx = train_test_split(
+        indices, test_size=(1 - train_ratio),
         stratify=stratify, random_state=42
     )
     
     # Second split: val vs test from temp
     val_fraction = val_ratio / (val_ratio + test_ratio)
-    val_ids, test_ids = train_test_split(
-        temp_ids, test_size=(1 - val_fraction),
-        stratify=stratify[train_indices]  # careful with indexing
-        if stratify is not None else None,
+    val_idx, test_idx = train_test_split(
+        temp_idx, test_size=(1 - val_fraction),
+        stratify=stratify[temp_idx] if stratify is not None else None,
         random_state=42
     )
     
-    return train_ids, val_ids, test_ids
+    return ids[train_idx], ids[val_idx], ids[test_idx]
 
 # Special considerations:
 # CV:  Ensure no identical images across splits (deduplicate by hash)
@@ -302,7 +303,7 @@ class CVPipeline:
         """For object detection / segmentation."""
         # Use torchvision's transforms v2:
         # T.RandomPhotometricDistort, T.RandomZoomOut, T.RandomIoUCrop
-        from torchvision.transforms import v2
+        import torchvision.transforms.v2 as v2
         return v2.Compose([
             v2.RandomPhotometricDistort(p=0.5),
             v2.RandomZoomOut(fill=0),
@@ -746,6 +747,8 @@ def get_llm_training_args(
         dataloader_num_workers=4,
     )
 
+```
+
 ### Learning Rate Selection Guide
 
 | Scenario | Learning Rate | Warmup | Scheduler |
@@ -765,8 +768,6 @@ def get_llm_training_args(
 ```python
 # LearningRateConfig / DataLoader / Optimizer — see Section 6 for full setup
 ```
-
-### Training Monitoring Checklist
 
 | What to Monitor | CV | LLM | Red Flag |
 |-----------------|----|-----|----------|
@@ -831,7 +832,7 @@ def evaluate_detection(pred_boxes, pred_scores, pred_labels, gt_boxes, gt_labels
         
         # Sort by confidence
         scores = pred_scores[pred_mask]
-        order = scores.argsort(descending=True)
+        order = np.argsort(scores)[::-1]
         
         tp = np.zeros(len(order))
         fp = np.zeros(len(order))
@@ -847,7 +848,6 @@ def evaluate_detection(pred_boxes, pred_scores, pred_labels, gt_boxes, gt_labels
             if max_iou >= iou_thresh:
                 tp[i] = 1
                 # Remove matched GT
-                gt_labels_remaining = list(gt_boxes[gt_mask].numpy())
                 # Simplification — real mAP needs careful matching
         
         # Cumulative precision/recall
@@ -1298,6 +1298,7 @@ def detect_drift(reference_dist, current_dist, method="psi"):
         return {"ks_stat": round(stat, 4), "p_value": round(pval, 4), "drift": pval < 0.05}
     
     elif method == "kl":
+        eps = 1e-10
         kl_div = entropy(reference_dist + eps, current_dist + eps)
         return {"kl_divergence": round(kl_div, 4)}
 
@@ -1417,7 +1418,7 @@ def should_retrain(metrics, drift_scores, accuracy_current, accuracy_threshold=0
 | RTX 4090 | ✅ | ✅ | ✅ | ❌ | ❌ | Fine-tuning, local dev |
 | RTX 6000 Ada | ✅ | ✅ | ✅ | ❌ | ❌ | Workstation, server |
 | Apple M1-M3 | ✅ | ✅ (ANE) | ❌ | ❌ | ❌ | Edge, on-device |
-| Intel Xeon (AMX) | ✅ | ❌ | ❌ | ✅ | ❌ | CPU inference |
+| Intel Xeon (AMX) | ✅ | ⚠️ | ❌ | ✅ | ❌ | CPU inference |
 | Intel Gaudi 2 | ✅ | ✅ | ✅ | ✅ | ❌ | LLM training alternative |
 | AWS Trainium | ✅ | ✅ | ✅ | ❌ | ❌ | LLM training |
 
