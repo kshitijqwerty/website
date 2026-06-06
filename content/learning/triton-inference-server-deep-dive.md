@@ -300,17 +300,17 @@ Dynamic batching is the single highest-leverage performance knob. Triton **trans
 
 ```mermaid
 flowchart LR
-  subgraph Incoming
-    A[A] B[B] C[C] D[D] E[E]
+  subgraph Without["Without Batching"]
+    direction LR
+    A1["A"] --> B1["B"] --> C1["C"] --> D1["D"] --> E1["E"]
   end
-  subgraph "Without Batching (5 serial)"
-    A1["[A]"] --> B1["[B]"] --> C1["[C]"] --> D1["[D]"] --> E1["[E]"]
+  subgraph WithBatching["With Batching"]
+    direction LR
+    ABC["A B C"] --> DE["D E"]
   end
-  subgraph "With Batching (2 batches)"
-    A2["[A][B][C]"] --> D2["[D][E]"]
-  end
-  subgraph "With Delay (1 batch)"
-    A3["[A][B][C][D][E]"]
+  subgraph WithDelay["With Max Queue Delay"]
+    direction LR
+    ALL["A B C D E"]
   end
 ```
 
@@ -967,8 +967,6 @@ Triton supports TLS for both HTTP and gRPC endpoints:
 ```bash
 tritonserver \
   --model-repository=/models \
-  --grpc-infer-allowed-protocols=tls \
-  --http-infer-allowed-protocols=tls \
   --grpc-use-ssl=1 \
   --grpc-server-cert=/certs/server.cert \
   --grpc-server-key=/certs/server.key \
@@ -977,7 +975,7 @@ tritonserver \
   --http-server-cert=/certs/server.cert \
   --http-server-key=/certs/server.key \
   --http-root-cert=/certs/ca.cert \
-  --allow-http=false \
+  --allow-http=true \
   --allow-grpc=true
 ```
 
@@ -1003,7 +1001,7 @@ client = grpcclient.InferenceServerClient(
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:
-  name: trion-mtls
+  name: triton-mtls
 spec:
   selector:
     matchLabels:
