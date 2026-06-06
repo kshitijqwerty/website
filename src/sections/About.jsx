@@ -50,7 +50,7 @@ export default function About() {
     <a href="https://dev.to/kgup"
     target="_blank"
     rel="noreferrer"
-    className="text-white hover:underline">
+    className="text-neutral-400 hover:text-neutral-200 underline">
     dev.to/kgup
   </a>
       </div>

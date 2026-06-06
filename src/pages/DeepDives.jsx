@@ -167,7 +167,7 @@ export default function DeepDives() {
   useEffect(() => {
     document.title = post
       ? `${post.title} — Kshitij Gupta`
-      : "Field Notes — Kshitij Gupta";
+      : "Learning — Kshitij Gupta";
     return () => {
       document.title = "Kshitij Gupta";
     };
@@ -209,7 +209,7 @@ export default function DeepDives() {
             to="/learning"
             className="text-neutral-400 hover:text-white transition-colors"
           >
-            ← Field Notes
+            ← Learning
           </Link>
           <span aria-hidden="true">·</span>
           <Link

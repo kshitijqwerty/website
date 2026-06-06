@@ -18,7 +18,7 @@ export default function Blogs() {
   return (
     <section id="blog" className="py-24">
       <SectionTitle
-        title="Blog & Writing"
+        title="Blogs"
         subtitle="Notes on backend engineering, machine learning, and distributed systems."
       />
 

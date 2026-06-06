@@ -32,7 +32,7 @@ export default function BlogIndex() {
 
         <div className="mb-14">
           <h1 className="text-5xl md:text-6xl font-bold font-heading mb-3">
-            Blog
+            Blogs
           </h1>
           <p className="text-neutral-400 max-w-2xl text-lg">
             Notes on backend engineering, machine learning, and distributed systems.

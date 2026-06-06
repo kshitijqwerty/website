@@ -22,7 +22,7 @@ export default function DeepDivesIndex() {
 
         <div className="mb-14">
           <h1 className="text-5xl md:text-6xl font-bold font-heading mb-3">
-            Field Notes
+            Learning
           </h1>
           <p className="text-neutral-400 max-w-2xl text-lg">
             Random learning notes that might be useful.
