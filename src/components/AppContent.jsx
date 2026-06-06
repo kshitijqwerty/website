@@ -31,13 +31,15 @@ export default function AppContent() {
   const location = useLocation();
 
   return (
-    <Routes location={location} key={location.pathname}>
-      <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
-      <Route path="/blog" element={<AnimatedPage><BlogIndex /></AnimatedPage>} />
-      <Route path="/blog/:slug" element={<><ReadingProgress /><AnimatedPage><BlogPost /></AnimatedPage></>} />
-      <Route path="/learning" element={<AnimatedPage><DeepDivesIndex /></AnimatedPage>} />
-      <Route path="/learning/:slug" element={<AnimatedPage><DeepDives /></AnimatedPage>} />
-      <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
-    </Routes>
+    <Suspense fallback={<div className="min-h-screen bg-neutral-950" />}>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
+        <Route path="/blog" element={<AnimatedPage><BlogIndex /></AnimatedPage>} />
+        <Route path="/blog/:slug" element={<><ReadingProgress /><AnimatedPage><BlogPost /></AnimatedPage></>} />
+        <Route path="/learning" element={<AnimatedPage><DeepDivesIndex /></AnimatedPage>} />
+        <Route path="/learning/:slug" element={<AnimatedPage><DeepDives /></AnimatedPage>} />
+        <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
+      </Routes>
+    </Suspense>
   );
 }

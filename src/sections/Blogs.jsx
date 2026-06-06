@@ -3,6 +3,15 @@ import { Link } from "react-router-dom";
 import SectionTitle from "../components/SectionTitle";
 import list from "../data/blogList.json";
 
+function formatDate(iso) {
+  if (!iso) return "";
+  return new Date(iso + "T00:00:00").toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
 export default function Blogs() {
   const latest = list.slice(0, 3);
 
@@ -21,7 +30,7 @@ export default function Blogs() {
             className="group block rounded-3xl border border-neutral-800 bg-neutral-900/50 p-7 card-hover border-t-2 border-t-violet-500/30 hover:border-t-violet-400/60 transition-colors"
           >
             <div className="text-xs text-neutral-500 mb-4">
-              <time>{new Date(post.date + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</time>
+              <time>{formatDate(post.date)}</time>
             </div>
 
             <h3 className="text-xl font-semibold font-heading leading-snug group-hover:text-violet-300 transition-colors">

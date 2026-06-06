@@ -98,6 +98,15 @@ function useCopyButtons(containerRef) {
   }, [containerRef]);
 }
 
+function formatDate(iso) {
+  if (!iso) return "";
+  return new Date(iso + "T00:00:00").toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
 export default function BlogPost() {
   const { slug } = useParams();
   const { resolved: theme } = useTheme();
@@ -287,7 +296,7 @@ export default function BlogPost() {
           <article className="flex-1 min-w-0">
             <header>
               <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-400 mb-4">
-                <time>{new Date(post.date + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</time>
+                <time>{formatDate(post.date)}</time>
                 <span aria-hidden="true">·</span>
                 <span>{readTime} min read</span>
               </div>
