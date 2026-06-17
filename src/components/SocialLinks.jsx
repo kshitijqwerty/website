@@ -41,7 +41,7 @@ export default function SocialLinks() {
       label: "Website",
     },
     {
-      href: "mailto:kg747@proton.me",
+      href: "mailto:mail@kgup.me",
       icon: Mail,
       label: "Email",
     },
