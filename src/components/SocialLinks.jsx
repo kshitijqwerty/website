@@ -26,7 +26,7 @@ export default function SocialLinks() {
       label: "GitHub",
     },
     {
-      href: "https://linkedin.com/in/horz7",
+      href: "https://linkedin.com/in/kgup",
       icon: Linkedin,
       label: "LinkedIn",
     },
