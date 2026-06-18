@@ -36,3 +36,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Generated standalone binary
+website-serve

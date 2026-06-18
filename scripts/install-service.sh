@@ -1,0 +1,52 @@
+#!/bin/bash
+set -e
+
+if [ "$EUID" -ne 0 ]; then
+  echo "Run as root: sudo bash scripts/install-service.sh"
+  exit 1
+fi
+
+BINARY="/usr/local/bin/website-serve"
+SERVICE="website-serve"
+
+echo "Building binary..."
+bash "$(dirname "$0")/build-binary.sh"
+
+echo "Installing binary to $BINARY..."
+cp website-serve "$BINARY"
+
+echo "Creating systemd service..."
+cat > /etc/systemd/system/$SERVICE.service << 'UNIT'
+[Unit]
+Description=Website binary — SPA static server
+Documentation=https://kgup.me
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/website-serve
+Restart=on-failure
+RestartSec=5
+Environment=PORT=8080
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+systemctl daemon-reload
+systemctl enable $SERVICE
+systemctl restart $SERVICE
+
+echo ""
+echo "Done. Service status:"
+systemctl status $SERVICE --no-pager
+
+echo ""
+echo "Manage it:"
+echo "  sudo systemctl status website-serve"
+echo "  sudo systemctl restart website-serve"
+echo "  sudo journalctl -u website-serve -f"
+echo ""
+echo "To switch nginx to proxy to it, set in your nginx config:"
+echo "  proxy_pass http://127.0.0.1:8080;"
