@@ -13,14 +13,7 @@ export default function CV() {
             download
             className="px-5 py-2.5 rounded-2xl border border-neutral-700 hover:border-neutral-500 transition-colors text-sm"
           >
-            Download PDF (LaTeX)
-          </a>
-          <a
-            href="/kshitij_cv_web.pdf"
-            download
-            className="px-5 py-2.5 rounded-2xl border border-neutral-700 hover:border-neutral-500 transition-colors text-sm"
-          >
-            Download PDF (Web version)
+            Download PDF
           </a>
         </div>
       </div>

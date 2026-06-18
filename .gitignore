@@ -20,7 +20,6 @@ src/data/learningPosts.json
 # Generated from content/cv/cv.tex
 src/data/cv.json
 public/kshitij_cv.pdf
-public/kshitij_cv_web.pdf
 content/cv/*.aux
 content/cv/*.log
 content/cv/*.out
