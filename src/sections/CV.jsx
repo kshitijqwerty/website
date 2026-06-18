@@ -9,7 +9,7 @@ export default function CV() {
 
         <div className="flex flex-wrap gap-3">
           <a
-            href="/kshitij_cv.pdf"
+            href={`/kshitij_cv.pdf?v=${cvData._version}`}
             download
             className="px-5 py-2.5 rounded-2xl border border-neutral-700 hover:border-neutral-500 transition-colors text-sm"
           >

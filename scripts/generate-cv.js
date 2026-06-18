@@ -178,6 +178,7 @@ function parseEducation(tex) {
 const tex = readFileSync(TEX_PATH, "utf-8");
 
 const data = {
+  _version: Date.now(),
   header: parseHeader(tex),
   summary: parseSummary(tex),
   skills: parseSkills(tex),
