@@ -23,6 +23,12 @@ if [ "$FORCE" = true ]; then
 fi
 
 echo "Changes detected. Building..."
+
+if ! command -v pdflatex &> /dev/null; then
+  echo "Installing LaTeX (one-time)..."
+  apt-get update -qq && apt-get install -y -qq texlive-latex-base texlive-latex-extra
+fi
+
 npm install
 npm run build
 rm -rf /var/www/html/*

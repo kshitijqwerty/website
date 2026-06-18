@@ -1,0 +1,152 @@
+\documentclass[a4paper,7.5pt]{extarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\geometry{a4paper, top=0.3in, bottom=0.3in, left=0.4in, right=0.4in}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\setlist[itemize]{noitemsep, topsep=0pt, partopsep=0pt, leftmargin=1.1em, itemsep=-1pt}
+\titleformat{\section}{\small\bfseries}{\thesection}{1em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{2pt}{2pt}
+\usepackage{parskip}
+\setlength{\parskip}{0pt}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{center}
+{\normalsize\textbf{Kshitij Gupta}}\\[1pt]
+\small
+\href{https://kgup.me}{kgup.me} $|$
+\href{https://www.linkedin.com/in/kgup}{linkedin.com/in/kgup} $|$
+\href{https://www.github.com/kshitijqwerty}{github.com/kshitijqwerty} $|$
+\href{mailto:mail@kgup.me}{mail@kgup.me} $|$
+(+91) 99100-36076 $|$
+New Delhi, India (Open to remote opportunities)
+\end{center}
+
+
+\section*{Summary}
+\small
+ML Engineer building production ML systems, specializing in LLM evaluation frameworks, retrieval-augmented applications, and scalable inference infrastructure on Kubernetes. Experienced across CV pipelines, on-device deployment, and cloud ML platforms (GCP/Azure).
+
+
+\section*{SKILLS}
+\small
+\begin{tabbing}
+   \textbf{Languages}~~~~~~~~~~~~~~~~~~~~~~~ \= Python, C++, JavaScript, TypeScript \\
+   \textbf{ML / CV}             \> PyTorch, OpenCV, Scikit-learn, Transformers\\
+   \textbf{LLM / RAG}           \> OpenAI, Anthropic, RAGAS, Sentence Transformers\\
+   \textbf{Web Stack}           \> FastAPI, Django, Flask, Node.js, React.js, Next.js, Electron.js \\
+   \textbf{Inference / Optimization}           \> ONNX, TFLite, Triton \\
+   \textbf{MLOps / Infrastructure}       \> Kubernetes, Docker, KServe, CI/CD, GCP, Azure  \\
+   \textbf{Datastores}        \> PostgreSQL, Qdrant, ChromaDB
+\end{tabbing}
+
+% \vspace{pt}
+
+\section*{EXPERIENCE}
+\small
+
+\noindent
+\textbf{CARS24} --- \textit{Machine Learning Engineer} \hfill Gurgaon, India $|$ June 2024 - June 2025
+\begin{itemize}
+    \item Designed and deployed end-to-end \textbf{Image Validation Pipeline} for per-part car inspection via \textbf{KServe + Triton} on GCP Kubernetes, cutting inspection time by \textbf{20--30 min per vehicle} and eliminating manual review bottlenecks.
+    \item Engineered on-device \textbf{TFLite} model for part classification \& pose detection --- full binary \textbf{under 5\,MB}, enabling offline inference on Android devices with zero cloud round-trip latency.
+    \item Extended damage-estimation pipeline with \textbf{underbody oil-leak detection} module, improving inspection coverage for a previously undetected damage category.
+    \item Owned the complete \textbf{MLOps lifecycle}: CVAT annotation $\rightarrow$ dataset versioning $\rightarrow$ training $\rightarrow$ automated cloud deployment, eliminating manual handoffs across teams.
+\end{itemize}
+
+\vspace{0pt}
+\noindent
+\textbf{Typeface India} --- \textit{Software Engineer (ML)} \hfill Hyderabad, India $|$ July 2023 - March 2024
+\begin{itemize}
+    \item Shipped production generative-image features for Fortune-500 clients (\textbf{LG, Marks \& Spencer, Ford}), owning the full pipeline from model integration to deployed inference.
+    \item Integrated and productionised \textbf{Stable Diffusion, Google Imagen and DALL-E}; built pipelines for scene generation, inpainting, outpainting, colour-palette extraction, and style-transfer at enterprise scale.
+    \item Maintained high-availability inference infrastructure on \textbf{Azure and GCP} for masking-based and generative workloads, ensuring SLA compliance for Fortune-500 clients.
+\end{itemize}
+
+\vspace{0pt}
+\noindent
+\textbf{ttdsoft} --- \textit{Software Engineer (Founding)} \hfill New Delhi, India $|$ May 2020 - June 2021
+\begin{itemize}
+    \item Built cross-platform \textbf{DRM suite} (\textbf{Windows, macOS, Android}) --- ePendrive, Secure Browser, encrypted video player with screen-capture protection; re-architected core stack from Python to \textbf{Electron.js} for performance and reliability.
+    \item Developed \textbf{Node.js} licensing \& encryption API; self-hosted entire stack (DBs, APIs, email OTP) on bare-metal with zero cloud spend.
+\end{itemize}
+
+\vspace{0pt}
+\noindent
+\textbf{MirrorSize US Inc.} --- \textit{Computer Vision Engineer} \hfill New Delhi, India $|$ May 2019 - June 2020
+\begin{itemize}
+    \item Built \textbf{Mask R-CNN} person-segmentation pipelines for automated body-contour extraction and body-measurement estimation from single-shot images.
+    \item Developed end-to-end computer vision workflows from image acquisition through measurement generation, enabling virtual fitting and sizing without specialist hardware.
+\end{itemize}
+
+% \vspace{-2pt}
+
+\section*{PROJECTS}
+\small
+
+\noindent
+\textbf{LLM Eval Harness}
+\href{https://github.com/kshitijqwerty/llm-eval-harness}{\texttt{GitHub}}
+\hfill
+\textit{Python, FastAPI, ChromaDB, PostgreSQL}
+\begin{itemize}
+    \item Built a YAML-driven LLM evaluation framework supporting \textbf{4 providers} (Ollama, Groq, OpenAI, Claude) for reproducible benchmarking across prompts and datasets.
+    \item Implemented an \textbf{LLM-as-judge evaluation pipeline} for scoring faithfulness, relevance, hallucination rate, and latency with structured metric aggregation.
+    \item Designed a full \textbf{RAG evaluation system} using ChromaDB + sentence-transformers embeddings for retrieval benchmarking and model comparison.
+    \item Built a \textbf{CI/CD evaluation gate (GitHub Actions)} that blocks deployments on regression in LLM quality metrics beyond defined thresholds.
+\end{itemize}
+
+\vspace{1pt}
+
+\noindent
+\textbf{NeuralDocs AI}
+\href{https://github.com/kshitijqwerty/analyze-doc-local-llm}{\texttt{Github}}
+\hfill
+\textit{FastAPI, Ollama, ChromaDB, Docker, Next.js}
+\begin{itemize}
+    \item Built a \textbf{local-first document intelligence system} enabling private RAG-based Q\&A with zero external data exposure.
+    \item Implemented document ingestion, chunking, embedding generation, and semantic retrieval using ChromaDB + sentence-transformers + Ollama.
+    \item Designed for \textbf{self-hosted deployment} on VPS, bare-metal, and Proxmox environments enabling fully offline enterprise workflows.
+\end{itemize}
+
+\vspace{1pt}
+
+\noindent
+\textbf{ONNXLab}
+\href{https://github.com/kshitijqwerty/onnxlab}{\texttt{GitHub}}
+\hfill
+\textit{Next.js, TypeScript, React Flow, ONNX Runtime Web}
+\begin{itemize}
+    \item Built a browser-based \textbf{ONNX model visualization and inspection tool} inspired by Netron with interactive computation graph rendering.
+    \item Enabled \textbf{client-side inference in the browser} using ONNX Runtime Web with automatic WebGPU / WASM fallback acceleration.
+    \item Developed a tensor pipeline supporting image preprocessing, top-K decoding, and custom label mapping for classification models.
+\end{itemize}
+
+\vspace{1pt}
+
+\noindent
+\textbf{Image Similarity Search}
+\href{https://github.com/kshitijqwerty/image-search-faiss}{\texttt{GitHub}}
+\hfill
+\textit{Python, FastAPI, PyTorch, FAISS}
+\begin{itemize}
+    \item Built a semantic image retrieval system using \textbf{CLIP ViT-B/32 embeddings} with FAISS-based approximate nearest neighbor search.
+    \item Evaluated multiple index structures (\textbf{HNSW, IVF, Flat}) with benchmarking on recall–latency trade-offs.
+    \item Implemented incremental indexing, embedding caching, and metadata filtering for scalable retrieval systems.
+\end{itemize}
+
+% \vspace{-2pt}
+
+\section*{EDUCATION}
+\small
+\noindent
+\textbf{IIIT Hyderabad} --- M.Tech, Computer Science \hfill Aug 2021 -- May 2023\\
+\textbf{IIIT Delhi} --- B.Tech, Computer Science \hfill Aug 2015 -- May 2019
+
+\end{document}

@@ -27,3 +27,6 @@
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
+
+/kshitij_cv.pdf
+  Cache-Control: public, max-age=31536000, immutable
