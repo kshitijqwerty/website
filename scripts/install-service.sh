@@ -14,21 +14,28 @@ bash "$(dirname "$0")/build-binary.sh"
 
 echo "Installing binary to $BINARY..."
 cp website-serve "$BINARY"
+chmod +x "$BINARY"
+
+echo "Verifying binary..."
+ls -lh "$BINARY"
+file "$BINARY"
+"$BINARY" -h 2>&1 | head -2 && echo "  (binary runs OK)" || echo "  (WARNING: binary failed to execute — check architecture)"
 
 echo "Creating systemd service..."
-cat > /etc/systemd/system/$SERVICE.service << 'UNIT'
+cat > /etc/systemd/system/$SERVICE.service << UNIT
 [Unit]
-Description=Website binary — SPA static server
+Description=website-serve — SPA static server (backup binary)
 Documentation=https://kgup.me
 After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/website-serve
-Restart=on-failure
+User=root
+Group=root
+ExecStart=$BINARY
+Restart=always
 RestartSec=5
 Environment=PORT=8080
-AmbientCapabilities=CAP_NET_BIND_SERVICE
 
 [Install]
 WantedBy=multi-user.target
