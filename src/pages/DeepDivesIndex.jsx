@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import deepDives from "../data/learningList.json";
+import papers from "../data/papers.json";
 import { useBookmarks } from "../hooks/useBookmarks";
 
 export default function DeepDivesIndex() {
@@ -24,9 +25,6 @@ export default function DeepDivesIndex() {
           <h1 className="text-5xl md:text-6xl font-bold font-heading mb-3">
             Learning
           </h1>
-          <p className="text-neutral-400 max-w-2xl text-lg">
-            Random learning notes that might be useful.
-          </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -63,6 +61,27 @@ export default function DeepDivesIndex() {
               </span>
             </Link>
           ))}
+        </div>
+
+        <div className="mt-24">
+          <h2 className="text-3xl md:text-4xl font-bold font-heading mb-2">
+            Papers Read
+          </h2>
+          <p className="text-neutral-400 text-lg mb-8">
+            Papers I&apos;ve read.
+          </p>
+
+          <div className="space-y-2">
+            {papers.map((p) => (
+              <div key={p.title} className="flex items-baseline gap-2">
+                <span className="text-emerald-400/50 shrink-0">•</span>
+                <a href={p.url} target="_blank" rel="noopener noreferrer" className="text-neutral-200 hover:text-emerald-300 transition-colors">
+                  {p.title}
+                </a>
+                {p.authors && <span className="text-neutral-500 text-sm">— {p.authors}</span>}
+              </div>
+            ))}
+          </div>
         </div>
       </main>
     </div>
