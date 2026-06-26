@@ -18,12 +18,9 @@ export default function Hero() {
         </h1>
 
         <p className="mt-8 text-lg text-neutral-400 leading-relaxed max-w-2xl">
-          I build production AI systems — from on-device TFLite models
-        running offline on Android to Kubernetes inference clusters
-        serving Fortune-500 clients on GCP and Azure.
-        4 years across computer vision, generative image pipelines,
-        and LLM infrastructure. Full-stack enough to own the entire
-        pipeline. Currently open to remote roles worldwide.
+          I build AI that ships — from edge models to LLM inference clusters in the cloud.
+        Generative AI, VLM infrastructure, production ML at scale.
+        Open to remote roles worldwide and relocation opportunities.
         </p>
 
         <div className="flex gap-4 mt-10">

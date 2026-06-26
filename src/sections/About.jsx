@@ -10,24 +10,12 @@ export default function About() {
       <h2 className="text-4xl font-bold mb-6 font-heading">About Me</h2>
 
       <p className="text-neutral-400 leading-relaxed text-lg mb-6">
-        I'm an ML Engineer with 4 years of production experience
-        across computer vision, generative AI, and LLM systems.
+        I'm an ML Engineer with production experience across computer vision, generative AI, and LLM systems.
+        My work spans the full ML lifecycle — from model training and optimization to KServe + Triton inference clusters on GCP and Azure. I've shipped generative image pipelines for Fortune-500 clients including LG, Ford, and Marks &amp; Spencer, and built sub-5MB on-device TFLite models for offline Android inference.
       </p>
-
-      <p className="text-neutral-400 leading-relaxed text-lg mb-6">
-        My work spans the full ML lifecycle — from CVAT annotation
-        pipelines and model training to KServe + Triton inference
-        clusters on GCP and Azure. I've shipped generative image
-        pipelines for Fortune-500 clients (LG, Ford, Marks &amp; Spencer)
-        and built sub-5MB on-device TFLite models for offline
-        Android inference.
-      </p>
-
 
       <p className="text-neutral-400 leading-relaxed text-lg mb-8">
-        Masters of Technology · IIIT Hyderabad &nbsp;|&nbsp;
-        Bachelors of Technology · IIIT Delhi &nbsp;|&nbsp;
-        KVPY Scholar &nbsp;|&nbsp; Dean's List
+        M.Tech · IIIT Hyderabad | B.Tech · IIIT Delhi | KVPY Scholar | Dean's List
       </p>
 
       {/* Skills */}
