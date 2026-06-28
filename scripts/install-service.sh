@@ -9,6 +9,9 @@ fi
 BINARY="/usr/local/bin/website-serve"
 SERVICE="website-serve"
 
+echo "Stopping existing service (if any)..."
+systemctl stop $SERVICE 2>/dev/null || true
+
 echo "Building binary..."
 bash "$(dirname "$0")/build-binary.sh"
 
