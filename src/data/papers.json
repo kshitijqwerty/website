@@ -1,5 +1,10 @@
 [
   {
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "authors": "Lewis et al.",
+    "url": "https://drive.google.com/file/d/1gSs2R0b48Glb2foo4W4STunASAB50J_n/view?usp=sharing"
+  },
+  {
     "title": "Efficient Memory Management for Large Language Model Serving with PagedAttention",
     "authors": "Kwon et al.",
     "url": "https://drive.google.com/file/d/1NKnrkWSc7PpNZZctaRcuXswSsiB9OyvI/view?usp=sharing"
