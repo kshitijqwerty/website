@@ -1,7 +1,6 @@
 \documentclass[a4paper,7.5pt]{extarticle}
 
 \usepackage[utf8]{inputenc}
-\usepackage{lmodern}
 \usepackage{geometry}
 \geometry{a4paper, top=0.3in, bottom=0.3in, left=0.4in, right=0.4in}
 \usepackage{titlesec}
@@ -25,25 +24,26 @@
 \href{https://www.github.com/kshitijqwerty}{github.com/kshitijqwerty} $|$
 \href{mailto:mail@kgup.me}{mail@kgup.me} $|$
 (+91) 99100-36076 $|$
-New Delhi, India (Open to relocation / remote opportunities)
+New Delhi, India \textbar{} Open to Relocation \& Remote Opportunities
 \end{center}
 
 
 \section*{Summary}
 \small
-ML Engineer building production ML systems, specializing in LLM evaluation frameworks, retrieval-augmented applications, and scalable inference infrastructure on Kubernetes. Experienced across CV pipelines, on-device deployment, and cloud ML platforms (GCP/Azure).
+ML Engineer building production AI systems across Computer Vision, LLMs, RAG, and scalable ML infrastructure on Kubernetes, GCP, and Azure.
 
 
 \section*{SKILLS}
 \small
 \begin{tabbing}
-   \textbf{Languages}~~~~~~~~~~~~~~~~~~~~~~~ \= Python, C++, JavaScript, TypeScript \\
-   \textbf{ML / CV}             \> PyTorch, OpenCV, Scikit-learn, Transformers\\
-   \textbf{LLM / RAG}           \> OpenAI, Anthropic, RAGAS, Sentence Transformers\\
-   \textbf{Web Stack}           \> FastAPI, Django, Flask, Node.js, React.js, Next.js, Electron.js \\
-   \textbf{Inference / Optimization}           \> ONNX, TFLite, Triton \\
-   \textbf{MLOps / Infrastructure}       \> Kubernetes, Docker, KServe, CI/CD, GCP, Azure  \\
-   \textbf{Datastores}        \> PostgreSQL, Qdrant, ChromaDB
+\textbf{Languages}~~~~~~~~~~~~~~~~~~~~~~~ \= Python, C++, JavaScript, TypeScript \\
+\textbf{ML / Deep Learning} \> PyTorch, OpenCV, Scikit-learn, Hugging Face Transformers \\
+\textbf{LLMs / Generative AI} \> OpenAI API, Anthropic Claude API, RAGAS, Sentence Transformers \\
+\textbf{Inference} \> Triton Inference Server, ONNX Runtime, TensorFlow Lite \\
+\textbf{Cloud / MLOps} \> Kubernetes, KServe, Docker, GitHub Actions, CI/CD, GCP, Azure \\
+\textbf{Backend} \> FastAPI, Django, Flask, Node.js \\
+\textbf{Frontend} \> React.js, Next.js, Electron.js \\
+\textbf{Datastores} \> PostgreSQL, Qdrant, ChromaDB
 \end{tabbing}
 
 % \vspace{pt}
@@ -54,19 +54,21 @@ ML Engineer building production ML systems, specializing in LLM evaluation frame
 \noindent
 \textbf{CARS24} --- \textit{Machine Learning Engineer} \hfill Gurgaon, India $|$ June 2024 - June 2025
 \begin{itemize}
-    \item Designed and deployed end-to-end \textbf{Image Validation Pipeline} for per-part car inspection via \textbf{KServe + Triton} on GCP Kubernetes, cutting inspection time by \textbf{20--30 min per vehicle} and eliminating manual review bottlenecks.
-    \item Engineered on-device \textbf{TFLite} model for part classification \& pose detection --- full binary \textbf{under 5\,MB}, enabling offline inference on Android devices with zero cloud round-trip latency.
-    \item Extended damage-estimation pipeline with \textbf{underbody oil-leak detection} module, improving inspection coverage for a previously undetected damage category.
-    \item Owned the complete \textbf{MLOps lifecycle}: CVAT annotation $\rightarrow$ dataset versioning $\rightarrow$ training $\rightarrow$ automated cloud deployment, eliminating manual handoffs across teams.
+    \item Designed and deployed an end-to-end image validation platform using \textbf{KServe + Triton} on GCP Kubernetes, reducing vehicle inspection time by \textbf{20--30 minutes} through automated part verification.
+    \item Owned the complete ML lifecycle from CVAT annotation and dataset versioning through model training and automated cloud deployment, eliminating manual handoffs across teams.
+    \item Developed an on-device \textbf{TensorFlow Lite} model (\textbf{5 MB}) for part classification and pose estimation, enabling fully offline Android inference with zero cloud latency.
+    \item Extended the damage estimation pipeline with an underbody oil-leak detection module, improving inspection coverage for a previously unsupported damage category.
 \end{itemize}
+
+
 
 \vspace{0pt}
 \noindent
 \textbf{Typeface India} --- \textit{Software Engineer (ML)} \hfill Hyderabad, India $|$ July 2023 - March 2024
 \begin{itemize}
-    \item Shipped production generative-image features for Fortune-500 clients (\textbf{LG, Marks \& Spencer, Ford}), owning the full pipeline from model integration to deployed inference.
-    \item Integrated and productionised \textbf{Stable Diffusion, Google Imagen and DALL-E}; built pipelines for scene generation, inpainting, outpainting, colour-palette extraction, and style-transfer at enterprise scale.
-    \item Maintained high-availability inference infrastructure on \textbf{Azure and GCP} for masking-based and generative workloads, ensuring SLA compliance for Fortune-500 clients.
+    \item Shipped production Generative AI features for Fortune 500 customers including \textbf{LG, Marks \& Spencer, and Ford}, owning the complete pipeline from model integration to deployment.
+    \item Integrated and productionized \textbf{Stable Diffusion, Google Imagen, and DALL-E} into enterprise inference pipelines supporting scene generation, inpainting, outpainting, color palette extraction, and style transfer.
+    \item Maintained highly available inference infrastructure on \textbf{Azure and GCP} for generative AI and computer vision workloads while meeting enterprise SLA requirements.
 \end{itemize}
 
 \vspace{0pt}
@@ -96,10 +98,10 @@ ML Engineer building production ML systems, specializing in LLM evaluation frame
 \hfill
 \textit{Python, FastAPI, ChromaDB, PostgreSQL}
 \begin{itemize}
-    \item Built a YAML-driven LLM evaluation framework supporting \textbf{4 providers} (Ollama, Groq, OpenAI, Claude) for reproducible benchmarking across prompts and datasets.
-    \item Implemented an \textbf{LLM-as-judge evaluation pipeline} for scoring faithfulness, relevance, hallucination rate, and latency with structured metric aggregation.
-    \item Designed a full \textbf{RAG evaluation system} using ChromaDB + sentence-transformers embeddings for retrieval benchmarking and model comparison.
-    \item Built a \textbf{CI/CD evaluation gate (GitHub Actions)} that blocks deployments on regression in LLM quality metrics beyond defined thresholds.
+    \item Built a configurable LLM evaluation platform supporting \textbf{OpenAI, Anthropic, Groq, and Ollama} with automated benchmarking across prompts and datasets.
+    \item Implemented an \textbf{LLM-as-Judge} evaluation pipeline for measuring faithfulness, relevance, hallucination rate, and latency with reproducible metric aggregation.
+    \item Designed a complete \textbf{RAG evaluation pipeline} using ChromaDB and Sentence Transformers for retrieval benchmarking and model comparison.
+    \item Built a \textbf{GitHub Actions} quality gate that blocks deployments when LLM evaluation metrics regress beyond configured thresholds.
 \end{itemize}
 
 \vspace{1pt}
@@ -110,9 +112,9 @@ ML Engineer building production ML systems, specializing in LLM evaluation frame
 \hfill
 \textit{FastAPI, Ollama, ChromaDB, Docker, Next.js}
 \begin{itemize}
-    \item Built a \textbf{local-first document intelligence system} enabling private RAG-based Q\&A with zero external data exposure.
-    \item Implemented document ingestion, chunking, embedding generation, and semantic retrieval using ChromaDB + sentence-transformers + Ollama.
-    \item Designed for \textbf{self-hosted deployment} on VPS, bare-metal, and Proxmox environments enabling fully offline enterprise workflows.
+    \item Built a \textbf{local-first document intelligence platform} enabling private RAG-based question answering with zero external data exposure.
+    \item Implemented document ingestion, chunking, embedding generation, semantic retrieval, and LLM inference using ChromaDB, Sentence Transformers, and Ollama.
+    \item Designed for fully self-hosted deployment across VPS, bare-metal, and Proxmox environments for secure enterprise document workflows.
 \end{itemize}
 
 \vspace{1pt}
@@ -124,8 +126,8 @@ ML Engineer building production ML systems, specializing in LLM evaluation frame
 \textit{Next.js, TypeScript, React Flow, ONNX Runtime Web}
 \begin{itemize}
     \item Built a browser-based \textbf{ONNX model visualization and inspection tool} inspired by Netron with interactive computation graph rendering.
-    \item Enabled \textbf{client-side inference in the browser} using ONNX Runtime Web with automatic WebGPU / WASM fallback acceleration.
-    \item Developed a tensor pipeline supporting image preprocessing, top-K decoding, and custom label mapping for classification models.
+    \item Enabled fully client-side inference using \textbf{ONNX Runtime Web} with automatic \textbf{WebGPU/WASM} acceleration.
+    \item Developed tensor preprocessing, inference visualization, top-K prediction decoding, and custom label mapping for browser-based model analysis.
 \end{itemize}
 
 \vspace{1pt}
@@ -136,9 +138,9 @@ ML Engineer building production ML systems, specializing in LLM evaluation frame
 \hfill
 \textit{Python, FastAPI, PyTorch, FAISS}
 \begin{itemize}
-    \item Built a semantic image retrieval system using \textbf{CLIP ViT-B/32 embeddings} with FAISS-based approximate nearest neighbor search.
-    \item Evaluated multiple index structures (\textbf{HNSW, IVF, Flat}) with benchmarking on recall–latency trade-offs.
-    \item Implemented incremental indexing, embedding caching, and metadata filtering for scalable retrieval systems.
+    \item Built a semantic image retrieval system using \textbf{CLIP ViT-B/32 embeddings} and FAISS-based approximate nearest-neighbor search.
+    \item Benchmarked multiple FAISS indexing strategies (\textbf{HNSW, IVF, Flat}) to evaluate recall versus latency trade-offs.
+    \item Implemented incremental indexing, embedding caching, and metadata filtering to support scalable semantic image retrieval.
 \end{itemize}
 
 % \vspace{-2pt}
